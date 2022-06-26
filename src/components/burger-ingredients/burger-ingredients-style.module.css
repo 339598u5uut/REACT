@@ -9,18 +9,10 @@
     column-gap: 56px;
 }
 
-.nav {
-    margin-bottom: 40px;
-    width: 100%;
-}
-
 .list {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    min-height: 56px;
-    border-bottom: 1px solid #2F2F37;
+    display: inline-grid;
+    grid: auto / repeat(3, 1fr);
+    justify-items: stretch;
 }
 
 .item {
@@ -28,8 +20,9 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    min-width: 272px;
-    min-height: 208px;
+    text-align: center;
+    max-width: 272px;
+    max-height: 208px;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -38,10 +31,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
-
-.ingredients_position_bun {
-    margin-bottom: 40px;
 }
 
 .menuLeft {

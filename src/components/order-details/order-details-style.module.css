@@ -1,0 +1,7 @@
+.container {
+    display: flex;
+    padding: 120px 100px;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 20;
+}
