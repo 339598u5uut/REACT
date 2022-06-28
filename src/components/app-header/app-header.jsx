@@ -29,7 +29,7 @@ function AppHeader(props) {
               <ProfileIcon type='secondary' />
               <li className={'text text_type_main-default'}><a href={props.url} className={'pl-2'}>Личный кабинет</a></li>
             </div>
-            
+
             <a className={headerstyles.logo} href={props.url}><Logo /></a>
           </ul>
         </nav>

@@ -2,7 +2,9 @@ import React from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
 import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import PropTypes from 'prop-types';
+import Modal from '../modal/modal';
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
@@ -22,16 +24,22 @@ const TabComponent = () => {
 }
 
 const Product = (props) => {
+	const [open, setOpen] = React.useState(false);
 	return (
 		<>
-			<li className={`${mainstyles.item} ${'p-1'}`} >
-				<img src={props.url} alt={props.name} />
-				<div className={`${mainstyles.content_item}  ${'pb-2'}`}>
-					<CurrencyIcon type="primary" />
-					<span className={'text text_type_digits-default pl-2'}>{props.price}</span>
-				</div>
-				<p className={'text text_type_digits-small'}>{props.name}</p>
-			</li>
+			<button onClick={() => setOpen(true)} className={mainstyles.button}>
+				<li className={`${mainstyles.item} ${'p-1'}`} >
+					<img src={props.image} alt={props.name} />
+					<div className={`${mainstyles.content_item}  ${'pb-2'}`}>
+						<CurrencyIcon type="primary" />
+						<span className={'text text_type_digits-default pl-2'}>{props.price}</span>
+					</div>
+					<p className={'text text_type_digits-small'}>{props.name}</p>
+				</li>
+			</button>
+			<Modal isOpen={open} onClose={() => setOpen(false)}>
+				<IngredientDetails image={props.image} name={props.name} calories={props.calories} proteins={props.proteins} fat={props.fat} carbohydrates={props.carbohydrates} />
+			</Modal>
 		</>
 	)
 }
@@ -53,48 +61,44 @@ function BurgerIngredients({ data }) {
 	const main = data.filter(element => element.type === "main");
 
 	return (
-		<>
-			<div className={mainstyles.menu}>
-				<div className={mainstyles.menuLeft}>
-					<TabComponent />
-					<ul className={mainstyles.ingredients}>
-						<div className={mainstyles.wrapper}>
+		<div className={mainstyles.menu}>
+			<div className={mainstyles.menuLeft}>
+				<TabComponent />
+				<ul className={mainstyles.ingredients}>
+					<div className={mainstyles.wrapper}>
 
-							<BlockType type={'Булки'}>
-								{bun.length &&
-									bun.map((bun, index) => <Product key={index} url={bun.image} price={bun.price} name={bun.name} />)}
-							</BlockType>
+						<BlockType type={'Булки'}>
+							{bun.length &&
+								bun.map((bun, _id) => <Product key={bun._id} url={bun.image} price={bun.price} name={bun.name} image={bun.image} calories={bun.calories} proteins={bun.proteins} fat={bun.fat} carbohydrates={bun.carbohydrates} />)}
+						</BlockType>
 
-							<BlockType type={'Соусы'}>
-								{sauce.length &&
-									sauce.map((sauce, index) => <Product key={index} url={sauce.image} price={sauce.price} name={sauce.name} />)}
-							</BlockType>
+						<BlockType type={'Соусы'}>
+							{sauce.length &&
+								sauce.map((sauce, _id) => <Product key={sauce._id} url={sauce.image} price={sauce.price} name={sauce.name} image={sauce.image} calories={sauce.calories} proteins={sauce.proteins} fat={sauce.fat} carbohydrates={sauce.carbohydrates} />)}
+						</BlockType>
 
-							<BlockType type={'Основное меню'}>
-								{main.length &&
-									main.map((main, index) => <Product key={index} url={main.image} price={main.price} name={main.name} />)}
-							</BlockType>
-						</div>
-					</ul>
-				</div>
-
+						<BlockType type={'Основное меню'}>
+							{main.length &&
+								main.map((main, _id) => <Product key={main._id} url={main.image} price={main.price} name={main.name} image={main.image} calories={main.calories} proteins={main.proteins} fat={main.fat} carbohydrates={main.carbohydrates} />)}
+						</BlockType>
+					</div>
+				</ul>
 			</div>
-		</>
+		</div>
 	)
 }
 
 BurgerIngredients.propTypes = {
-	className: PropTypes.string,
-	price: PropTypes.number,
-	name: PropTypes.string,
-	current: PropTypes.string,
-	value: PropTypes.string,
-	active: PropTypes.bool,
-	setCurrent: PropTypes.string,
-	url: PropTypes.string,
-	type: PropTypes.string,
-	data: PropTypes.array,
-	key: PropTypes.number,
+	data: PropTypes.arrayOf(PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		image: PropTypes.string.isRequired,
+		price: PropTypes.number.isRequired,
+		name: PropTypes.string.isRequired,
+		calories: PropTypes.number.isRequired,
+		proteins: PropTypes.number.isRequired,
+		fat: PropTypes.number.isRequired,
+		carbohydrates: PropTypes.number.isRequired,
+	})).isRequired,
 }
 
 export default BurgerIngredients;

@@ -1,7 +1,6 @@
 import React from 'react';
 import styledetails from './ingredient-details-style.module.css';
-import { PropTypes } from 'react';
-
+import PropTypes from "prop-types";
 
 function IngredientDetails(props) {
 	return (
@@ -31,13 +30,13 @@ function IngredientDetails(props) {
 	)
 }
 
-// IngredientDetails.propTypes = {
-// 	carbohydrates:PropTypes.string,
-// 	fat:PropTypes.string,
-// 	calories:PropTypes.string,
-// 	proteins:PropTypes.string,
-// 	name:PropTypes.string,
-// 	className: PropTypes.string,
-// }
+IngredientDetails.propTypes = {
+	calories: PropTypes.number.isRequired,
+	carbohydrates: PropTypes.number.isRequired,
+	fat: PropTypes.number.isRequired,
+	image: PropTypes.string.isRequired,
+	name: PropTypes.string.isRequired,
+	proteins: PropTypes.number.isRequired,
+}
 
 export default IngredientDetails;
