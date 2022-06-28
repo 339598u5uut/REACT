@@ -37,7 +37,7 @@ class App extends React.Component {
         <AppHeader />
         <main>
           <section className={style.section}>
-            <p className={'text text_type_digits-medium mb-5'}>Соберите бургер</p>
+            <p className={'text text_type_main-large mb-5'}>Соберите бургер</p>
             <div className={style.container}>
               {isLoading && 'Загрузка...'}
               {hasError && 'Произошла ошибка'}

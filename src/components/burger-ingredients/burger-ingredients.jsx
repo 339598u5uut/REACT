@@ -5,6 +5,7 @@ import { useState } from 'react';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import PropTypes from 'prop-types';
 import Modal from '../modal/modal';
+import ingredientType from '../utils/types';
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
@@ -32,9 +33,9 @@ const Product = (props) => {
 					<img src={props.image} alt={props.name} />
 					<div className={`${mainstyles.content_item}  ${'pb-2'}`}>
 						<CurrencyIcon type="primary" />
-						<span className={'text text_type_digits-default pl-2'}>{props.price}</span>
+						<span className={'text text_type_main-default pl-2'}>{props.price}</span>
 					</div>
-					<p className={'text text_type_digits-small'}>{props.name}</p>
+					<p className={'text text_type_main-small'}>{props.name}</p>
 				</li>
 			</button>
 			<Modal isOpen={open} onClose={() => setOpen(false)}>
@@ -47,7 +48,7 @@ const Product = (props) => {
 const BlockType = (props) => {
 	return (
 		<>
-			<p className={'text text_type_digits-default'}>{props.type}</p>
+			<p className={'text text_type_main-medium'}>{props.type}</p>
 			<div className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 				{props.children}
 			</div>
@@ -89,16 +90,7 @@ function BurgerIngredients({ data }) {
 }
 
 BurgerIngredients.propTypes = {
-	data: PropTypes.arrayOf(PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-		image: PropTypes.string.isRequired,
-		price: PropTypes.number.isRequired,
-		name: PropTypes.string.isRequired,
-		calories: PropTypes.number.isRequired,
-		proteins: PropTypes.number.isRequired,
-		fat: PropTypes.number.isRequired,
-		carbohydrates: PropTypes.number.isRequired,
-	})).isRequired,
+	data: ingredientType
 }
 
 export default BurgerIngredients;

@@ -5,7 +5,7 @@ import imgbun from '../../images/bun.png';
 import PropTypes from 'prop-types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-
+import ingredientType from '../utils/types';
 
 const Layer = (props) => {
 	return (
@@ -53,7 +53,7 @@ const BurgerConstructor = ({ data }) => {
 				<ConstructorElement
 					type="bottom"
 					isLocked={true}
-					text='Краторная булка N-200i (верх)'
+					text='Краторная булка N-200i (низ)'
 					price={20}
 					thumbnail={imgbun}
 				/>
@@ -61,34 +61,21 @@ const BurgerConstructor = ({ data }) => {
 
 			<div className={`${mainstyles.button} ${'pt-10 pr-10'}`}>
 				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>610</p>
-				<Button onClick={() => setOpen(true)} type='primary' size='medium'>
+				<Button onClick={() => setOpen(true)} type='primary' size='medium' className={'text text_type_digits-medium'}>
 					Оформить заказ
 				</Button>
 			</div>
 
 			{/* модальное окно кнопки оформления заказа*/}
 			<Modal isOpen={open} onClose={() => setOpen(false)}>
-				<OrderDetails number='123456' id='Идентификатор заказа' message='Ваш заказ начали готовить' recommendation='Дождитесь готовности на орбитальной станции' />
+				<OrderDetails number='123456' id='идентификатор заказа' message='Ваш заказ начали готовить' recommendation='Дождитесь готовности на орбитальной станции' />
 			</Modal>
 		</div>
 	)
 }
 
 BurgerConstructor.propTypes = {
-	data: PropTypes.arrayOf(PropTypes.shape({
-		text: PropTypes.string,
-		open: PropTypes.bool,
-		isLocked: PropTypes.bool,
-		key: PropTypes.number,
-		type: PropTypes.string,
-		size: PropTypes.string,
-		price: PropTypes.number.isRequired,
-		calories: PropTypes.number.isRequired,
-		proteins: PropTypes.number.isRequired,
-		fat: PropTypes.number.isRequired,
-		carbohydrates: PropTypes.number.isRequired,
-		name: PropTypes.string.isRequired,
-	})).isRequired,
+	data: ingredientType
 }
 
 export default BurgerConstructor;

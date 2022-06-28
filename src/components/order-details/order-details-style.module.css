@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    padding: 120px 100px;
+    padding: 100px 100px 120px 100px;
     justify-content: flex-end;
     align-items: center;
     z-index: 20;
