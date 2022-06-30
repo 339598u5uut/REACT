@@ -1,0 +1,27 @@
+.container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    margin-top: 140px;
+    padding: 40px 40px 60px 40px;
+    width: 720px;
+    height: 718px;
+    background-color: #1C1C21;
+    border-radius: 40px;
+    z-index: 10;
+}
+
+.icon {
+    position: absolute;
+    top: 60px;
+    right: 40px;
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+}
