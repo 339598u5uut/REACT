@@ -26,7 +26,7 @@ export function getIngredients() {
                 // для записи полученных данных в хранилище
                 dispatch({
                     type: GET_INGREDIENTS_SUCCESS,
-                    feed: res.data
+                    ingredients: res.data
                 })
             } else {
                 // Если произошла ошибка, отправляем соотвтествующий экшен

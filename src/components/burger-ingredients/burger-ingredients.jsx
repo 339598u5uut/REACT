@@ -6,7 +6,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import ingredientType from '../utils/types';
 import { DataContext } from '../../services/app-context';
-
+import { useSelector } from 'react-redux';
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
@@ -56,9 +56,12 @@ const BlockType = (props) => {
 		</>
 	)
 }
+const loadingInrdientsSeletctor =(state={}) => state.getIngredients.ingredientsRequest;
 
 function BurgerIngredients() {
 	
+	const loadingIngredients = useSelector(loadingInrdientsSeletctor)
+console.log(loadingIngredients, 'loadingIngredients')
 	const {data, setData} = useContext(DataContext);
 	const bun = data.filter(element => element.type === "bun");
 	const sauce = data.filter(element => element.type === "sauce");
@@ -67,6 +70,8 @@ function BurgerIngredients() {
 	return (
 		<div className={mainstyles.menu}>
 			<div className={mainstyles.menuLeft}>
+				{loadingIngredients &&
+				<p>Loading</p>}
 				<TabComponent />
 				<ul className={mainstyles.ingredients}>
 					<div className={mainstyles.wrapper}>

@@ -9,7 +9,7 @@ export const getIngredientsRequest = () => {
             return res.json();
         })
         .then(data => {
-            return data.data;
+            return data;
         })
         .catch(e => {
             return Promise.reject(e)

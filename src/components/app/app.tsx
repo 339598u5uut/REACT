@@ -22,20 +22,23 @@ function App() {
   const [hasError, setHasError] = useState(false);
 
 
-  useEffect(() => {
-    setIsLoading(true);
-    getIngredientsRequest()
-      .then(setData)
-      .catch(e => {
-        setHasError(true);
-        setIsLoading(false);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
-
   // useEffect(() => {
-  //   dispatch(getIngredients())
-  // }, [dispatch]);
+  //   setIsLoading(true);
+  //   getIngredientsRequest()
+  //     .then(setData)
+  //     .catch(e => {
+  //       setHasError(true);
+  //       setIsLoading(false);
+  //     })
+  //     .finally(() => setIsLoading(false));
+  // }, []);
+
+
+
+  useEffect(() => {
+    // @ts-ignore
+    dispatch(getIngredients())
+  }, [dispatch]);
 
   return (
     <div className="App">
