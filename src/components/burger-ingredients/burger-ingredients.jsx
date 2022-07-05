@@ -1,11 +1,12 @@
 import React from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
 import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import PropTypes from 'prop-types';
 import Modal from '../modal/modal';
 import ingredientType from '../utils/types';
+import { DataContext } from '../../services/app-context';
+
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
@@ -56,7 +57,9 @@ const BlockType = (props) => {
 	)
 }
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients() {
+	
+	const {data, setData} = useContext(DataContext);
 	const bun = data.filter(element => element.type === "bun");
 	const sauce = data.filter(element => element.type === "sauce");
 	const main = data.filter(element => element.type === "main");

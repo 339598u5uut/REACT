@@ -1,11 +1,13 @@
 import React from 'react';
 import mainstyles from './burger-constructor-style.module.css';
 import { ConstructorElement, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import imgbun from '../../images/bun.png';
-import PropTypes from 'prop-types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import ingredientType from '../utils/types';
+import { useContext, useState, useEffect } from 'react';
+import { DataContext } from '../../services/app-context';
+// import { getOrderRequest } from '../utils/app-api';
+
 
 const Layer = (props) => {
 	return (
@@ -20,57 +22,140 @@ const Layer = (props) => {
 	)
 }
 
-const BurgerConstructor = ({ data }) => {
+const LayerTop = (props) => {
+	return (
+		<div className={`${mainstyles.block} ${'pl-8'}`}>
+			<ConstructorElement
+				type={"top"}
+				isLocked={true}
+				text={props.name}
+				price={props.price}
+				thumbnail={props.image}
+			/>
+		</div>
+	)
+}
+
+const LayerBottom = (props) => {
+	return (
+		<div className={`${mainstyles.block} ${'pl-8'}`}>
+			<ConstructorElement
+				type="bottom"
+				isLocked={true}
+				text={props.name}
+				price={props.price}
+				thumbnail={props.image}
+			/>
+		</div>
+	)
+}
+let number;
+let totalPrice;
+const BurgerConstructor = () => {
 	const [open, setOpen] = React.useState(false);
+	const { data, setData } = useContext(DataContext);
+
+	//номер заказа из post-запроса
+	// const [number, setNumber] = React.useState('');
 
 	const sauce = data.filter(element => element.type === "sauce");
 	const main = data.filter(element => element.type === "main");
+	const bun = data.filter(element => element.type === "bun");
 	const mediumLayer = sauce.concat(main);
 
+
+
+	function getCheckout(event) {
+		event.preventDefault();
+
+		//попытка запроса номера заказа с усилителем
+		// getOrderRequest()
+		//   .then(setNumber)
+		//   .catch(e => {
+		// 	console.log(e)
+		//   })
+
+
+//массив id всех ингредиентов заказа для post-запроса, за исключением 2 булок
+		const arrayIdIngredients = {
+			"ingredients": []
+		}
+
+		const arrayPrice = []
+
+
+		for (let i = 0; i < mediumLayer.length; i++) {
+			arrayIdIngredients.ingredients.push(mediumLayer[i]._id)
+			arrayPrice.push(mediumLayer[i].price)
+
+		}
+		totalPrice = arrayPrice.reduce((a, b) => a + b);
+		//   console.log(totalPrice)
+
+
+		fetch('http://norma.nomoreparties.space/api/orders', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(arrayIdIngredients)
+
+		})
+			.then(res => {
+				if (!res.ok) {
+					throw new Error('Ответ сервера не OK');
+				}
+				return res.json();
+			})
+			.then((number) => {
+				number = number.order.number;
+				console.log(number)
+			}
+			)
+			.catch(e => {
+				console.log(e)
+			})
+	};
+
+
 	return (
-		<div className={`${mainstyles.order} ${'pl-10'}`}>
+		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout}>
 
 			{/* верхняя булка */}
-			<div className={`${mainstyles.block} ${'pl-8'}`}>
-				<ConstructorElement
-					type={"top"}
-					isLocked={true}
-					text='Краторная булка N-200i (верх)'
-					price={20}
-					thumbnail={imgbun}
-				/>
-			</div>
+			{bun &&
+				bun.map((bun) =>
+					<LayerTop name={bun.name} price={bun.price} image={bun.image} />)
+			}
 
 			<div className={mainstyles.wrapper_burger}>
 				{mediumLayer.length &&
-					mediumLayer.map((mediumLayer, index) =>
-						<Layer key={index} name={mediumLayer.name} price={mediumLayer.price} image={mediumLayer.image} calories={mediumLayer.calories}
+					mediumLayer.map((mediumLayer, _id) =>
+						<Layer key={mediumLayer._id} name={mediumLayer.name} price={mediumLayer.price} image={mediumLayer.image} calories={mediumLayer.calories}
 							proteins={mediumLayer.proteins} fat={mediumLayer.fat} carbohydrates={mediumLayer.carbohydrates} />)}
 			</div>
 
 			{/* нижняя булка */}
-			<div className={`${mainstyles.block} ${'pl-8'}`}>
-				<ConstructorElement
-					type="bottom"
-					isLocked={true}
-					text='Краторная булка N-200i (низ)'
-					price={20}
-					thumbnail={imgbun}
-				/>
-			</div>
-
+			{bun &&
+				bun.map((bun) =>
+					<LayerBottom name={bun.name} price={bun.price} image={bun.image} />)
+			}
+			{/* кнопка */}
 			<div className={`${mainstyles.button} ${'pt-10 pr-10'}`}>
-				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>610</p>
-				<Button onClick={() => setOpen(true)} type='primary' size='medium' className={'text text_type_digits-medium'}>
+				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>{`${totalPrice}`}</p>
+				<Button onClick={
+					() => setOpen(true)}
+					type='primary'
+					size='medium'
+					className={'text text_type_digits-medium'}>
 					Оформить заказ
 				</Button>
 			</div>
 
 			{/* модальное окно кнопки оформления заказа*/}
 			<Modal isOpen={open} onClose={() => setOpen(false)}>
-				<OrderDetails number='123456' id='идентификатор заказа' message='Ваш заказ начали готовить' recommendation='Дождитесь готовности на орбитальной станции' />
+				<OrderDetails number={`${number}`} id='идентификатор заказа' message='Ваш заказ начали готовить' recommendation='Дождитесь готовности на орбитальной станции' />
 			</Modal>
-		</div>
+		</form>
 	)
 }
 
