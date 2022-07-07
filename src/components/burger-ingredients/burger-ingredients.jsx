@@ -1,36 +1,63 @@
 import React from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
 import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState,useContext } from 'react';
+import { useState } from 'react';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import ingredientType from '../utils/types';
-import { DataContext } from '../../services/app-context';
+import ingredientType from '../../utils/types';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useDrag } from "react-dnd";
+import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useRef} from 'react';
+
+
+// const bunRef = useRef(null);
+//   const sauceRef = useRef(null);
+//   const mainRef = useRef(null);
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
 	return (
 		<div className={`${mainstyles.list} ${'mb-10'}`} >
-			<Tab value="one" active={current === 'one'} onClick={setCurrent}>
-				Булки
-			</Tab>
-			<Tab value="two" active={current === 'two'} onClick={setCurrent}>
-				Соусы
-			</Tab>
-			<Tab value="three" active={current === 'three'} onClick={setCurrent}>
-				Начинки
-			</Tab>
+			<a className={mainstyles.link} href="#bun">
+				<Tab value="one" active={current === 'one'} onClick={setCurrent}>
+					Булки
+				</Tab>
+			</a>
+			<a className={mainstyles.link} href="#sauce">
+				<Tab value="two" active={current === 'two'} onClick={setCurrent}>
+					Соусы
+				</Tab>
+			</a>
+			<a className={mainstyles.link} href="#main">
+				<Tab value="three" active={current === 'three'} onClick={setCurrent}>
+					Начинки
+				</Tab>
+			</a>
 		</div>
 	)
 }
 
-const Product = (props) => {
+const Product = (props,  {_id}) => {
 	const [open, setOpen] = React.useState(false);
-	return (
+
+
+
+	const [, dragRef] = useDrag({
+        type: 'ingredient',
+        item: { _id },      
+    })
+
+
+	const [count, setCount] = useState(0);
+	const addCount = () => setCount(count + 1);
+	
+	return (	
 		<>
 			<button onClick={() => setOpen(true)} className={mainstyles.button}>
-				<li className={`${mainstyles.item} ${'p-1'}`} >
+			<div className={mainstyles.counter}><Counter count={count} size="default" /></div>
+				<li className={`${mainstyles.item} ${'p-1'}`}  ref={dragRef}>
 					<img src={props.image} alt={props.name} />
 					<div className={`${mainstyles.content_item}  ${'pb-2'}`}>
 						<CurrencyIcon type="primary" />
@@ -46,54 +73,46 @@ const Product = (props) => {
 	)
 }
 
-const BlockType = (props) => {
-	return (
-		<>
-			<p className={'text text_type_main-medium'}>{props.type}</p>
-			<div className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
-				{props.children}
-			</div>
-		</>
-	)
-}
-const loadingInrdientsSeletctor =(state={}) => state.getIngredients.ingredientsRequest;
+
+const ingredientsSelector = (state = {}) => state.ingredients.ingredients;
 
 function BurgerIngredients() {
-	
-	const loadingIngredients = useSelector(loadingInrdientsSeletctor)
-console.log(loadingIngredients, 'loadingIngredients')
-	const {data, setData} = useContext(DataContext);
-	const bun = data.filter(element => element.type === "bun");
-	const sauce = data.filter(element => element.type === "sauce");
-	const main = data.filter(element => element.type === "main");
+
+		
+	const ingredients = useSelector(ingredientsSelector);
+
+	const bun = ingredients.filter(element => element.type === "bun");
+	const sauce = ingredients.filter(element => element.type === "sauce");
+	const main = ingredients.filter(element => element.type === "main");
 
 	return (
 		<div className={mainstyles.menu}>
 			<div className={mainstyles.menuLeft}>
-				{loadingIngredients &&
-				<p>Loading</p>}
 				<TabComponent />
 				<ul className={mainstyles.ingredients}>
 					<div className={mainstyles.wrapper}>
 
-						<BlockType type={'Булки'}>
+						<p className={'text text_type_main-medium'} id='bun'>Булки</p>
+						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{bun.length &&
-								bun.map((bun, _id) => <Product key={bun._id} url={bun.image} price={bun.price} name={bun.name} image={bun.image} calories={bun.calories} proteins={bun.proteins} fat={bun.fat} carbohydrates={bun.carbohydrates} />)}
-						</BlockType>
+								bun.map((bun, _id) => <Product key={bun._id} {...bun} />)}
+						</li>
 
-						<BlockType type={'Соусы'}>
+						<p className={'text text_type_main-medium'} id='sauce'>Соусы</p>
+						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{sauce.length &&
-								sauce.map((sauce, _id) => <Product key={sauce._id} url={sauce.image} price={sauce.price} name={sauce.name} image={sauce.image} calories={sauce.calories} proteins={sauce.proteins} fat={sauce.fat} carbohydrates={sauce.carbohydrates} />)}
-						</BlockType>
+								sauce.map((sauce, _id) => <Product key={sauce._id} {...sauce} />)}
+						</li>
 
-						<BlockType type={'Основное меню'}>
+						<p className={'text text_type_main-medium'} id='main'>Начинки</p>
+						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{main.length &&
-								main.map((main, _id) => <Product key={main._id} url={main.image} price={main.price} name={main.name} image={main.image} calories={main.calories} proteins={main.proteins} fat={main.fat} carbohydrates={main.carbohydrates} />)}
-						</BlockType>
-					</div>
+								main.map((main, _id) => <Product key={main._id}{...main} />)}
+						</li>
+					</div >
 				</ul>
-			</div>
-		</div>
+			</div >
+		</div >
 	)
 }
 

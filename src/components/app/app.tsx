@@ -5,40 +5,23 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
 import style from './app.module.css';
 import { useEffect, useState } from 'react';
-import { DataContext } from '../../services/app-context';
-import { getIngredientsRequest } from '../utils/app-api';
-import { useSelector,useDispatch } from 'react-redux';
-import { getIngredients } from '../../services/actions';
-
+import { useDispatch } from 'react-redux';
+import { ingredients } from '../../services/actions/ingredients';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 
 function App() {
-   
+
   const dispatch = useDispatch();
-
-
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getIngredientsRequest()
-  //     .then(setData)
-  //     .catch(e => {
-  //       setHasError(true);
-  //       setIsLoading(false);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
-
+  const [data] = useState([]);
+  
 
   useEffect(() => {
     // @ts-ignore
-    dispatch(getIngredients())
+    dispatch(ingredients())
   }, [dispatch]);
+
 
   return (
     <div className="App">
@@ -47,26 +30,15 @@ function App() {
         <section className={style.section}>
           <p className={'text text_type_main-large mb-5'}>Соберите бургер</p>
           <div className={style.container}>
-            {isLoading && 'Загрузка...'}
-            {hasError && 'Произошла ошибка'}
-            <DataContext.Provider value={{ data, setData }}>
-              {!isLoading &&
-                !hasError &&
-                !!data.length &&
-                <BurgerIngredients data={data} />}
-              {!isLoading &&
-                !hasError &&
-                data.length &&
-                <BurgerConstructor data={data} />}
-            </DataContext.Provider>
-
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients data={data} />
+              <BurgerConstructor data={data} />
+            </DndProvider>
           </div>
         </section>
       </main>
+
     </div>
   );
-}
-
-
+};
 export default App;
-
