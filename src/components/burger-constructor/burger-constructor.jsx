@@ -8,7 +8,10 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrder } from '../../services/actions/order';
 import { addIngredient } from '../../services/actions/ingredient';
+import { deleteIngredient } from '../../services/actions/ingredient';
 import { useDrop } from "react-dnd";
+import {createSelector} from "reselect";
+import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
 let totalPrice;
 
 
@@ -45,23 +48,35 @@ let totalPrice;
 // 	)
 // }
 
-export const LayerBottom = (props) => {
-	return (
-		<div className={`${mainstyles.block} ${'pl-8'}`}>
-			<ConstructorElement
-				type="bottom"
-				isLocked={true}
-				text={props.name}
-				price={props.price}
-				thumbnail={props.image}
-			/>
-		</div>
+// export const LayerBottom = (props) => {
+// 	return (
+// 		<div className={`${mainstyles.block} ${'pl-8'}`}>
+// 			<ConstructorElement
+// 				type="bottom"
+// 				isLocked={true}
+// 				text={props.name}
+// 				price={props.price}
+// 				thumbnail={props.image}
+// 			/>
+// 		</div>
+// 	)
+// }
+
+const userIngredientsSelector = createSelector(
+	ingredientsSelector,state => state.ingredient.ingredientItems,
+	(ingredients,ingredientItems)=>ingredientItems.map((el)=>{
+	const ingredientObject =ingredients.find((ingredient)=>el._id===ingredient._id)
+	// console.log(ingredientObject, "ingredientObject")
+	return ingredientObject
+	})
 	)
-}
 
 
+
+
+	
 const BurgerConstructor = () => {
-	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = useState(false);
 	const dispatch = useDispatch();
 
 
@@ -69,23 +84,22 @@ const BurgerConstructor = () => {
 		accept: "ingredient",
 		drop(item) {
 			dispatch(addIngredient(item));
-			console.log(item, 'item')
+			// console.log(item, 'item')
 		},
 	});
 
 
-	const layersBurgersMedium = useSelector(state => state.ingredient.ingredientItems);
-	const layersBun = useSelector(state => state.ingredient.ingredientBun);
+	
+	
 	const order = useSelector(state => state.order.order)
 
+const userIngredients =  useSelector(userIngredientsSelector)
+
+// console.log(userIngredients,"userIngredients")
 
 
-	totalPrice = layersBurgersMedium.lenght ?
-		(layersBurgersMedium.reduce((a, b) => a + b.price, 0) + (2 * layersBun.price))
-		: 0
-
-	
-
+	totalPrice = userIngredients.reduce((a, b) => a + b.price, 0)
+		
 
 	// @ts-ignore
 	function getCheckout(event) {
@@ -93,43 +107,53 @@ const BurgerConstructor = () => {
 		dispatch(getOrder());
 	};
 
-	// const arrayIdIngredients = {
-	// 	"ingredients": []
-	// }
-
 	return (
-		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout}>
+		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout}  ref={dropTarget} >
 
 
-			{/* {layersBun ? <LayerTop {...layersBun} /> : ''} */}
-			{layersBun ? (
-				<div className={`${mainstyles.block} ${'pl-8'}`} ref={dropTarget}>
+{userIngredients.filter((el)=>el.type ==='bun').map((userIngredient) =>
+						{	
+				 <div className={`${mainstyles.block} ${'pl-8'}`}>
 					<ConstructorElement
 						type={"top"}
 						isLocked={true}
-						text={layersBun.name}
-						price={layersBun.price}
-						thumbnail={layersBun.image}
+						text={userIngredient.name}
+						price={userIngredient.price}
+						thumbnail={userIngredient.image}
 					/>
-				</div>) : ''}
+				</div> })}
 
 
-			<div className={mainstyles.wrapper_burger}>
-
-				{layersBurgersMedium.lenght ?
-					(layersBurgersMedium.map((_id) =>
-						<div className={mainstyles.block} ref={dropTarget} key={layersBurgersMedium._id}>
-							<DragIcon type='primary' />
-							<ConstructorElement
-								text={layersBurgersMedium.name}
-								price={layersBurgersMedium.price}
-								thumbnail={layersBurgersMedium.image}
-							/>
-						</div>))
-					: null}
+			<div className={mainstyles.wrapper_burger} >
+			
+					{userIngredients.filter((el)=>el.type !=='bun').map((userIngredient) =>
+						{
+							return(<div className={mainstyles.block} key={userIngredient._id} >
+								<DragIcon type='primary' />
+								<ConstructorElement
+									text={userIngredient.name}
+									price={userIngredient.price}
+									thumbnail={userIngredient.image}
+									handleClose={(() => dispatch(deleteIngredient(userIngredient._id)))}								
+								/>
+							</div>)
+						})}					
 			</div>
 
-			{layersBun ? <LayerBottom {...layersBun} /> : ''}
+			{userIngredients.filter((el)=>el.type ==='bun').map((userIngredient) =>
+						{		
+		 <div className={`${mainstyles.block} ${'pl-8'}`}>		
+			<ConstructorElement
+				type="bottom"
+				isLocked={true}
+				text={userIngredient.name}
+				price={userIngredient.price}
+				thumbnail={userIngredient.image}
+			/>
+		</div>})}
+	
+
+
 
 			{/* кнопка */}
 			<div className={`${mainstyles.button} ${'pt-10 pr-10'}`}>

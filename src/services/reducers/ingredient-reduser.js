@@ -21,14 +21,14 @@ export const addIngredientReduce = (state = initialState, action) => {
             {
                 return {
                     ...state,
-                    ingredientItems: {...state.ingredientItems, ...action.array }
+                    ingredientItems: [...state.ingredientItems, action.array]
                 }
             }
         case DELETE_INGREDIENT:
             {
                 return {
                     ...state,
-                    ingredientItems: [...state.ingredientItems].filter((ingredientItem) => ingredientItem._id !== ingredientItem._uuid)
+                    ingredientItems: [...state.ingredientItems].filter((ingredientItem) => ingredientItem._id !== action._id)
                 }
             }
         default:

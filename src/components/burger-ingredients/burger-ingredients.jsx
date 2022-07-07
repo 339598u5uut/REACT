@@ -11,10 +11,11 @@ import { useDrag } from "react-dnd";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useRef} from 'react';
 
+// const bunRef = React.useRef<HTMLParagraphElement>(null);
+// const sauceRef = React.useRef<HTMLParagraphElement>(null);
+// const mainRef = React.useRef<HTMLParagraphElement>(null);
 
-// const bunRef = useRef(null);
-//   const sauceRef = useRef(null);
-//   const mainRef = useRef(null);
+
 
 const TabComponent = () => {
 	const [current, setCurrent] = useState('one')
@@ -39,14 +40,14 @@ const TabComponent = () => {
 	)
 }
 
-const Product = (props,  {_id}) => {
+const Product = (props) => {
 	const [open, setOpen] = React.useState(false);
-
+// console.log(props,"props")
 
 
 	const [, dragRef] = useDrag({
         type: 'ingredient',
-        item: { _id },      
+        item: { _id: props._id },      
     })
 
 
@@ -74,10 +75,13 @@ const Product = (props,  {_id}) => {
 }
 
 
-const ingredientsSelector = (state = {}) => state.ingredients.ingredients;
+export const ingredientsSelector = (state = {}) => state.ingredients.ingredients;
 
 function BurgerIngredients() {
 
+	const bunRef = useRef(null);
+  const sauceRef = useRef(null);
+  const mainRef = useRef(null);
 		
 	const ingredients = useSelector(ingredientsSelector);
 
@@ -92,19 +96,19 @@ function BurgerIngredients() {
 				<ul className={mainstyles.ingredients}>
 					<div className={mainstyles.wrapper}>
 
-						<p className={'text text_type_main-medium'} id='bun'>Булки</p>
+						<p className={'text text_type_main-medium'} id='bun' ref={bunRef}>Булки</p>
 						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{bun.length &&
 								bun.map((bun, _id) => <Product key={bun._id} {...bun} />)}
 						</li>
 
-						<p className={'text text_type_main-medium'} id='sauce'>Соусы</p>
+						<p className={'text text_type_main-medium'} id='sauce' ref={sauceRef} >Соусы</p>
 						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{sauce.length &&
 								sauce.map((sauce, _id) => <Product key={sauce._id} {...sauce} />)}
 						</li>
 
-						<p className={'text text_type_main-medium'} id='main'>Начинки</p>
+						<p className={'text text_type_main-medium'} id='main' ref={mainRef}>Начинки</p>
 						<li className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{main.length &&
 								main.map((main, _id) => <Product key={main._id}{...main} />)}

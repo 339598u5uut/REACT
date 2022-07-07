@@ -13,3 +13,12 @@ export const addIngredient = (ingredient) => {
         })
     };
 }
+
+export const deleteIngredient = (ingredient) => {
+    return function(dispatch) {
+        dispatch({
+            type: DELETE_INGREDIENT,
+            array: ingredient,
+        })
+    };
+}
