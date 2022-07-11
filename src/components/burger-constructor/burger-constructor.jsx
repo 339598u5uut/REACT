@@ -3,180 +3,211 @@ import mainstyles from './burger-constructor-style.module.css';
 import { ConstructorElement, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import PropTypes from "prop-types";
 import ingredientType from '../../utils/types';
-import { useState, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrder } from '../../services/actions/order';
-import { addIngredient } from '../../services/actions/ingredient';
-import { deleteIngredient } from '../../services/actions/ingredient';
-import { useDrop } from "react-dnd";
-import {createSelector} from "reselect";
+import { addIngredient, addIngredientBun, deleteIngredient, moveIngredients } from '../../services/actions/ingredient';
+import { useDrop, useDrag } from "react-dnd";
+import { createSelector } from "reselect";
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
-let totalPrice;
+import { ARRAY_DRAG_MOVE } from '../../services/actions';
+const { v4: uuidv4 } = require('uuid');
 
+let totalPrice = [];
 
-
-
-// const Layer = (props,{onDropHandler}) => {
-{/* <div className={`${mainstyles.block} ${'pl-8'}`} ref={dropTarget}>
-			<ConstructorElement
-				type={"top"}
-				isLocked={true}
-				text={props.name}
-				price={props.price}
-				thumbnail={props.image}
-			/>
-		</div> */}
-
-// 	return (
-
-// 	)
-// }
-
-// export const LayerTop = (props) => {
-
-// 	return (
-// 		<div className={`${mainstyles.block} ${'pl-8'}`}>
-// 			<ConstructorElement
-// 				type={"top"}
-// 				isLocked={true}
-// 				text={props.name}
-// 				price={props.price}
-// 				thumbnail={props.image}
-// 			/>
-// 		</div>
-// 	)
-// }
-
-// export const LayerBottom = (props) => {
-// 	return (
-// 		<div className={`${mainstyles.block} ${'pl-8'}`}>
-// 			<ConstructorElement
-// 				type="bottom"
-// 				isLocked={true}
-// 				text={props.name}
-// 				price={props.price}
-// 				thumbnail={props.image}
-// 			/>
-// 		</div>
-// 	)
-// }
-
-const userIngredientsSelector = createSelector(
-	ingredientsSelector,state => state.ingredient.ingredientItems,
-	(ingredients,ingredientItems)=>ingredientItems.map((el)=>{
-	const ingredientObject =ingredients.find((ingredient)=>el._id===ingredient._id)
-	// console.log(ingredientObject, "ingredientObject")
-	return ingredientObject
+export const userIngredientsSelector = createSelector(
+	ingredientsSelector, state => state.ingredient.ingredientItems,
+	(ingredients, ingredientItems) => ingredientItems.map((el) => {
+		const ingredientObject = ingredients.find((ingredient) => el._id === ingredient._id);
+		return ingredientObject;
 	})
-	)
+)
 
-
-
-
-	
-const BurgerConstructor = () => {
-	const [open, setOpen] = useState(false);
+function Layer({ index, moveIngredient, item }) {
 	const dispatch = useDispatch();
+	const ref = useRef(null);
+	const [, dragRef] = useDrag({
+		type: 'ingredient2',
+		item: ({ _id: item._id, index }),
+		collect: (monitor) => ({
+			isDragging: monitor.isDragging(),
+		}),
+	});
 
+	const [, dropRef] = useDrop({
+		accept: "ingredient2",
+		hover: (item, monitor) => {
+			if (!ref.current) {
+				return;
+			}
 
-	const [, dropTarget] = useDrop({
-		accept: "ingredient",
-		drop(item) {
-			dispatch(addIngredient(item));
-			// console.log(item, 'item')
+			const dragIndex = item.index;
+			const hoverIndex = index;
+			if (dragIndex === hoverIndex) {
+				return;
+			}
+			const hoverBoundingRect = ref.current?.getBoundingClientRect();
+			const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+			const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+
+			if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
+			if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
+
+			moveIngredient(dragIndex, hoverIndex);
+			item.index = hoverIndex;
+
 		},
 	});
 
+	const dragDropRef = dragRef(dropRef(ref));
+	return (
 
-	
-	
-	const order = useSelector(state => state.order.order)
+		<li className={mainstyles.block} ref={dragDropRef}>
+			<DragIcon type='primary' />
+			<ConstructorElement
+				text={item.name}
+				price={item.price}
+				thumbnail={item.image}
+				handleClose={(() =>
+					dispatch(deleteIngredient(item._id)))}
+			/>
+		</li>
+	)
+}
 
-const userIngredients =  useSelector(userIngredientsSelector)
+const BurgerConstructor = () => {
 
-// console.log(userIngredients,"userIngredients")
+	const [open, setOpen] = useState(false);
+	const dispatch = useDispatch();
 
+	const userIngredients = useSelector(userIngredientsSelector);
 
-	totalPrice = userIngredients.reduce((a, b) => a + b.price, 0)
-		
-
-	// @ts-ignore
-	function getCheckout(event) {
-		event.preventDefault();
-		dispatch(getOrder());
+	let userIngredientsId = {
+		"ingredients": []
 	};
 
+	for (let i = 0; i < userIngredients.length; i++) {
+		userIngredientsId.ingredients.push(userIngredients[i]._id)
+	};
+
+	function getCheckout(event) {
+		event.preventDefault();
+		dispatch(getOrder(userIngredientsId));
+	};
+
+	const order = useSelector(state => state.order.order);
+	totalPrice = userIngredients.reduce((a, b) => a + b.price, 0);
+
+	//элемент form
+	const [, dropTarget] = useDrop({
+		accept: "ingredient",
+		drop(item) {
+			if (item._id === '60d3b41abdacab0026a733c6' 
+			|| item._id === '60d3b41abdacab0026a733c7') {
+				
+				dispatch(addIngredientBun(item))
+			} else {
+				dispatch(addIngredient(item))
+			}
+		}
+	});
+
+	const moveIngredient = useCallback(
+		(dragIndex, hoverIndex) => {
+
+			const dragIngredient = userIngredients[dragIndex];
+			if (dragIngredient) {
+				const newIngredients = [...userIngredients];
+				newIngredients.splice(dragIndex, 1);
+				newIngredients.splice(hoverIndex, 0, dragIngredient);
+				dispatch({ type: ARRAY_DRAG_MOVE, array: newIngredients });
+			}
+		}, [userIngredients])
+
+
+
+	const bunId = useSelector(state => state.ingredient.ingredientBun);
+	const arrayAllIngredientsfromApi = useSelector(state => state.ingredients.ingredients);
+	const bun = arrayAllIngredientsfromApi.find(el => el._id === bunId._id);
+
+	userIngredientsId.ingredients.push(bun, bun);
+
 	return (
-		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout}  ref={dropTarget} >
+		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout} ref={dropTarget} >
 
-
-{userIngredients.filter((el)=>el.type ==='bun').map((userIngredient) =>
-						{	
-				 <div className={`${mainstyles.block} ${'pl-8'}`}>
+			{bun &&
+				<div className={`${mainstyles.block} ${'pl-8'}`} key={uuidv4()}>
 					<ConstructorElement
 						type={"top"}
 						isLocked={true}
-						text={userIngredient.name}
-						price={userIngredient.price}
-						thumbnail={userIngredient.image}
+						text={bun.name}
+						price={bun.price}
+						thumbnail={bun.image}
 					/>
-				</div> })}
+				</div>
+			}
 
 
-			<div className={mainstyles.wrapper_burger} >
-			
-					{userIngredients.filter((el)=>el.type !=='bun').map((userIngredient) =>
-						{
-							return(<div className={mainstyles.block} key={userIngredient._id} >
-								<DragIcon type='primary' />
-								<ConstructorElement
-									text={userIngredient.name}
-									price={userIngredient.price}
-									thumbnail={userIngredient.image}
-									handleClose={(() => dispatch(deleteIngredient(userIngredient._id)))}								
-								/>
-							</div>)
-						})}					
-			</div>
+			<ul className={mainstyles.wrapper_burger} >
+				{userIngredients.filter((el) => el.type !== 'bun').map((userIngredient, index) => {
+					return (
+						<Layer
+							key={uuidv4()}
+							index={index}
+							item={userIngredient}
+							moveIngredient={moveIngredient}
+						/>
+					)
+				})}
+			</ul>
 
-			{userIngredients.filter((el)=>el.type ==='bun').map((userIngredient) =>
-						{		
-		 <div className={`${mainstyles.block} ${'pl-8'}`}>		
-			<ConstructorElement
-				type="bottom"
-				isLocked={true}
-				text={userIngredient.name}
-				price={userIngredient.price}
-				thumbnail={userIngredient.image}
-			/>
-		</div>})}
-	
 
+			{bun &&
+				<div className={`${mainstyles.block} ${'pl-8'}`} key={uuidv4()}>
+					<ConstructorElement
+						type="bottom"
+						isLocked={true}
+						text={bun.name}
+						price={bun.price}
+						thumbnail={bun.image}
+					/>
+				</div>
+			}
 
 
 			{/* кнопка */}
 			<div className={`${mainstyles.button} ${'pt-10 pr-10'}`}>
-				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>{totalPrice}</p>
+				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>
+					{bun ?
+						totalPrice = totalPrice + bun.price * 2 : totalPrice}</p>
 				<Button onClick={
 					() => setOpen(true)}
 					type='primary'
 					size='medium'
-					className={'text text_type_digits-medium'}>
+					className={'text text_type_digits-medium'}
+					disabled={userIngredients.length && bun ? false : true}
+				>
 					Оформить заказ
 				</Button>
 			</div>
 
 			{order &&
 				<Modal isOpen={open} onClose={() => setOpen(false)}>
-					<OrderDetails number={`${order}`} id='идентификатор заказа' message='Ваш заказ начали готовить' recommendation='Дождитесь готовности на орбитальной станции' />
+					<OrderDetails
+						number={`${order}`}
+						id='идентификатор заказа'
+						message='Ваш заказ начали готовить'
+						recommendation='Дождитесь готовности на орбитальной станции' />
 				</Modal>}
 		</form>
 	)
 }
 
 BurgerConstructor.propTypes = {
-	data: ingredientType
+	data: ingredientType,
+	moveIngredient: PropTypes.func,
+	index: PropTypes.number,
 }
-
 export default BurgerConstructor;

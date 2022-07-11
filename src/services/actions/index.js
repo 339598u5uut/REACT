@@ -9,8 +9,11 @@ export const GET_ORDER_ERROR = 'GET_ORDER_ERROR';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const NOT_SHOW_MODAL = 'SHOW_MODAL';
 
-
-
 export const ADD_INGREDIENT = 'ADD_INGREDIENT';
-export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
 export const ADD_BUN = 'ADD_BUN';
+export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+
+export const ARRAY_DRAG_MOVE = "ARRAY_DRAG_MOVE";
+
+export const GET_INGREDIENT = "GET_INGREDIENT";
+export const DEL_INGREDIENT = 'DEL_INGREDIENT';

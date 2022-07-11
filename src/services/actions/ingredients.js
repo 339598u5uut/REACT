@@ -1,7 +1,6 @@
 import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from "."
 import { URL } from "../../utils/app-api";
 
-
 export const getIngredientsRequest = () => {
     return fetch(`${URL}/ingredients`)
         .then(res => {
@@ -17,7 +16,6 @@ export const getIngredientsRequest = () => {
             return Promise.reject(e)
         })
 };
-
 
 // усилитель
 export function ingredients() {

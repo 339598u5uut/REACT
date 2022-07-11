@@ -10,18 +10,15 @@ import { ingredients } from '../../services/actions/ingredients';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-
 function App() {
 
   const dispatch = useDispatch();
   const [data] = useState([]);
-  
 
   useEffect(() => {
     // @ts-ignore
     dispatch(ingredients())
   }, [dispatch]);
-
 
   return (
     <div className="App">

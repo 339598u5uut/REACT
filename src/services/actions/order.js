@@ -2,19 +2,18 @@ import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from "."
 import { URL } from "../../utils/app-api";
 
 
-export const getOrderRequest = () => {
-    // console.log(layersBurgers)
+
+export function getOrderRequest(numbers) {
     return fetch(`${URL}/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({})
-                // ingredients: [...layersBurgers.filter((i) => i._id)] 
+            body: JSON.stringify(numbers)
         })
         .then(res => {
             if (!res.ok) {
-                throw new Error('Ответ сервера не OK');
+                throw new Error('Сервер не отвечает');
             }
             return res.json();
         })
@@ -26,17 +25,16 @@ export const getOrderRequest = () => {
         })
 };
 
-// усилитель
-export function getOrder() {
+export function getOrder(numbers) {
     return function(dispatch) {
         dispatch({
             type: GET_ORDER_REQUEST
         })
-        getOrderRequest().then(res => {
+        getOrderRequest(numbers).then(res => {
             if (res && res.success) {
                 dispatch({
                     type: GET_ORDER_SUCCESS,
-                    order: res.data
+                    order: res.order.number
                 })
             } else {
                 dispatch({

@@ -8,6 +8,7 @@ import close from '../../images/icon.png';
 const modalRoot = document.getElementById("react-modals");
 function Modal(props) {
 	const { isOpen, onClose } = props;
+
 	const keydownHandler = ({ key }) => {
 		switch (key) {
 			case 'Escape':

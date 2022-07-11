@@ -1,14 +1,11 @@
-import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN } from "../actions";
-
-
-
+import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN, ARRAY_DRAG_MOVE } from "../actions";
 
 const initialState = {
     ingredientBun: {},
     ingredientItems: [],
 };
 
-export const addIngredientReduce = (state = initialState, action) => {
+export const ingredientReduce = (state = initialState, action) => {
     switch (action.type) {
         case ADD_BUN:
             {
@@ -21,14 +18,27 @@ export const addIngredientReduce = (state = initialState, action) => {
             {
                 return {
                     ...state,
-                    ingredientItems: [...state.ingredientItems, action.array]
+                    ingredientItems: [...state.ingredientItems, action.array],
+
                 }
             }
         case DELETE_INGREDIENT:
             {
+                const newState = {...state };
+                const itemIndex = newState.ingredientItems.findIndex(
+                    (item) => item._id === action.id
+                )
+                newState.ingredientItems.splice(itemIndex, 1);
                 return {
                     ...state,
-                    ingredientItems: [...state.ingredientItems].filter((ingredientItem) => ingredientItem._id !== action._id)
+                    ingredientItems: [...newState.ingredientItems],
+                };
+            }
+        case ARRAY_DRAG_MOVE:
+            {
+                return {
+                    ...state,
+                    ingredientItems: [...action.array],
                 }
             }
         default:
