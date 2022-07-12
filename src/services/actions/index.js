@@ -12,8 +12,16 @@ export const NOT_SHOW_MODAL = 'SHOW_MODAL';
 export const ADD_INGREDIENT = 'ADD_INGREDIENT';
 export const ADD_BUN = 'ADD_BUN';
 export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+export const CLEAR_CONSTRUCTOR = 'CLEAR_CONSTRUCTOR'
 
 export const ARRAY_DRAG_MOVE = "ARRAY_DRAG_MOVE";
 
 export const GET_INGREDIENT = "GET_INGREDIENT";
 export const DEL_INGREDIENT = 'DEL_INGREDIENT';
+
+export default function checkResponse(res) {
+    if (!res.ok) {
+        throw new Error("Сервер не отвечает.");
+    }
+    return res.json();
+}

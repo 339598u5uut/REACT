@@ -4,7 +4,6 @@ import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-compo
 import { useState } from 'react';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import ingredientType from '../../utils/types';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useDrag } from "react-dnd";
@@ -22,12 +21,12 @@ const Product = (props) => {
 
 	const handleOpenModal = () => {
 		dispatch(getIngredient(props));
-		setOpen(true)
+		setOpen(true);
 	};
 
 	const handleCloseModal = () => {
 		dispatch(deleteIngredient());
-		setOpen(!open)
+		setOpen(!open);
 	};
 
 	const [, dragRef] = useDrag({
@@ -59,12 +58,13 @@ const Product = (props) => {
 
 const allIngredientsSelector = createSelector((state) => state.ingredient,
 	({ ingredientItems, ingredientBun }) => {
-	
+
 		if (ingredientBun && ingredientBun._id) {
 			return [...ingredientItems, ingredientBun]
 		}
 		return ingredientItems;
 	})
+
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
 
@@ -86,7 +86,7 @@ function BurgerIngredients() {
 	const userIngredients = useSelector(allIngredientsSelector);
 
 	const counter = userIngredients.reduce((acc, cur) => {
-	
+
 		if (acc[cur._id]) {
 			return {
 				...acc,
@@ -159,10 +159,6 @@ function BurgerIngredients() {
 			</div >
 		</div >
 	)
-}
-
-BurgerIngredients.propTypes = {
-	data: ingredientType
 }
 
 export default BurgerIngredients;

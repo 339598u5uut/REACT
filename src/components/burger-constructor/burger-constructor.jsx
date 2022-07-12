@@ -4,16 +4,14 @@ import { ConstructorElement, Button, DragIcon } from '@ya.praktikum/react-develo
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import PropTypes from "prop-types";
-import ingredientType from '../../utils/types';
 import { useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrder } from '../../services/actions/order';
-import { addIngredient, addIngredientBun, deleteIngredient, moveIngredients } from '../../services/actions/ingredient';
+import { addIngredient, addIngredientBun, deleteIngredient } from '../../services/actions/ingredient';
 import { useDrop, useDrag } from "react-dnd";
 import { createSelector } from "reselect";
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
 import { ARRAY_DRAG_MOVE } from '../../services/actions';
-const { v4: uuidv4 } = require('uuid');
 
 let totalPrice = [];
 
@@ -21,7 +19,8 @@ export const userIngredientsSelector = createSelector(
 	ingredientsSelector, state => state.ingredient.ingredientItems,
 	(ingredients, ingredientItems) => ingredientItems.map((el) => {
 		const ingredientObject = ingredients.find((ingredient) => el._id === ingredient._id);
-		return ingredientObject;
+		const object = { ...ingredientObject, constructorId: el.constructorId }
+		return object;
 	})
 )
 
@@ -57,14 +56,13 @@ function Layer({ index, moveIngredient, item }) {
 
 			moveIngredient(dragIndex, hoverIndex);
 			item.index = hoverIndex;
-
 		},
 	});
 
 	const dragDropRef = dragRef(dropRef(ref));
 	return (
 
-		<li className={mainstyles.block} ref={dragDropRef}>
+		<li className={mainstyles.block} ref={dragDropRef} key={item.key}>
 			<DragIcon type='primary' />
 			<ConstructorElement
 				text={item.name}
@@ -104,9 +102,9 @@ const BurgerConstructor = () => {
 	const [, dropTarget] = useDrop({
 		accept: "ingredient",
 		drop(item) {
-			if (item._id === '60d3b41abdacab0026a733c6' 
-			|| item._id === '60d3b41abdacab0026a733c7') {
-				
+			if (item._id === '60d3b41abdacab0026a733c6'
+				|| item._id === '60d3b41abdacab0026a733c7') {
+
 				dispatch(addIngredientBun(item))
 			} else {
 				dispatch(addIngredient(item))
@@ -126,8 +124,6 @@ const BurgerConstructor = () => {
 			}
 		}, [userIngredients])
 
-
-
 	const bunId = useSelector(state => state.ingredient.ingredientBun);
 	const arrayAllIngredientsfromApi = useSelector(state => state.ingredients.ingredients);
 	const bun = arrayAllIngredientsfromApi.find(el => el._id === bunId._id);
@@ -138,23 +134,23 @@ const BurgerConstructor = () => {
 		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout} ref={dropTarget} >
 
 			{bun &&
-				<div className={`${mainstyles.block} ${'pl-8'}`} key={uuidv4()}>
+				<div className={`${mainstyles.block} ${'pl-8'}`}>
 					<ConstructorElement
 						type={"top"}
 						isLocked={true}
-						text={bun.name}
+						text={bun.name + ' ' + '(верх)'}
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
 				</div>
 			}
 
-
 			<ul className={mainstyles.wrapper_burger} >
 				{userIngredients.filter((el) => el.type !== 'bun').map((userIngredient, index) => {
+
 					return (
 						<Layer
-							key={uuidv4()}
+							key={userIngredient.constructorId}
 							index={index}
 							item={userIngredient}
 							moveIngredient={moveIngredient}
@@ -163,19 +159,17 @@ const BurgerConstructor = () => {
 				})}
 			</ul>
 
-
 			{bun &&
-				<div className={`${mainstyles.block} ${'pl-8'}`} key={uuidv4()}>
+				<div className={`${mainstyles.block} ${'pl-8'}`}>
 					<ConstructorElement
 						type="bottom"
 						isLocked={true}
-						text={bun.name}
+						text={bun.name + ' ' + '(низ)'}
 						price={bun.price}
 						thumbnail={bun.image}
 					/>
 				</div>
 			}
-
 
 			{/* кнопка */}
 			<div className={`${mainstyles.button} ${'pt-10 pr-10'}`}>
@@ -206,7 +200,6 @@ const BurgerConstructor = () => {
 }
 
 BurgerConstructor.propTypes = {
-	data: ingredientType,
 	moveIngredient: PropTypes.func,
 	index: PropTypes.number,
 }

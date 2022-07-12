@@ -1,14 +1,10 @@
 import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from "."
 import { URL } from "../../utils/app-api";
+import checkResponse from ".";
 
 export const getIngredientsRequest = () => {
     return fetch(`${URL}/ingredients`)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Ответ сервера не OK');
-            }
-            return res.json();
-        })
+        .then(checkResponse)
         .then(data => {
             return data;
         })
@@ -17,28 +13,39 @@ export const getIngredientsRequest = () => {
         })
 };
 
+export function getIngredientsReq() {
+    return {
+        type: GET_INGREDIENTS_REQUEST,
+    }
+}
+
+export function getIngredientsSucc(res) {
+    return {
+        type: GET_INGREDIENTS_SUCCESS,
+        ingredients: res.data
+    }
+}
+
+export function getIngredientsError() {
+    return {
+        type: GET_INGREDIENTS_ERROR
+    }
+}
+
 // усилитель
 export function ingredients() {
     return function(dispatch) {
 
-        dispatch({
-            type: GET_INGREDIENTS_REQUEST
-        })
-        getIngredientsRequest().then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: GET_INGREDIENTS_SUCCESS,
-                    ingredients: res.data
-                })
-            } else {
-                dispatch({
-                    type: GET_INGREDIENTS_ERROR
-                })
-            }
-        }).catch(err => {
-            dispatch({
-                type: GET_INGREDIENTS_ERROR
+        dispatch(getIngredientsReq());
+        getIngredientsRequest()
+            .then(res => {
+                if (res && res.success) {
+                    dispatch(getIngredientsSucc(res));
+                } else {
+                    dispatch(getIngredientsError());
+                }
+            }).catch(err => {
+                dispatch(getIngredientsError());
             })
-        })
     }
 }

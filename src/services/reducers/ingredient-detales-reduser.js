@@ -1,10 +1,8 @@
 import { GET_INGREDIENT, DEL_INGREDIENT } from "../actions";
 
-
 const initialState = {
     ingredient: {},
 };
-
 
 export const currentIngredientReduce = (state = initialState, action) => {
     switch (action.type) {

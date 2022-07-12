@@ -1,10 +1,10 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from "../actions";
 
-
 const initialState = {
     order: '',
     orderRequest: false,
     orderError: false,
+    isFetching: false,
 };
 
 export const getNumberOrderReducer = (state = initialState, action) => {
@@ -14,6 +14,7 @@ export const getNumberOrderReducer = (state = initialState, action) => {
                 return {
                     ...state,
                     orderRequest: true,
+                    isFetching: true,
                 };
             }
         case GET_ORDER_SUCCESS:
@@ -23,6 +24,7 @@ export const getNumberOrderReducer = (state = initialState, action) => {
                     orderRequest: false,
                     orderError: false,
                     order: action.order,
+                    isFetching: false,
                 };
             }
         case GET_ORDER_ERROR:
@@ -31,6 +33,7 @@ export const getNumberOrderReducer = (state = initialState, action) => {
                     ...state,
                     orderRequest: false,
                     orderError: true,
+                    isFetching: false,
                 };
             }
         default:

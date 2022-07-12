@@ -1,7 +1,31 @@
-import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from "."
+import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR, CLEAR_CONSTRUCTOR } from ".";
+import checkResponse from ".";
 import { URL } from "../../utils/app-api";
 
+export function getOrderReq() {
+    return {
+        type: GET_ORDER_REQUEST,
+    }
+}
 
+export function getOrderSucc(res) {
+    return {
+        type: GET_ORDER_SUCCESS,
+        order: res.order.number
+    }
+}
+
+export function afterOrderClearConstructor() {
+    return {
+        type: CLEAR_CONSTRUCTOR
+    }
+}
+
+export function getOrderError() {
+    return {
+        type: GET_ORDER_ERROR
+    }
+}
 
 export function getOrderRequest(numbers) {
     return fetch(`${URL}/orders`, {
@@ -11,40 +35,24 @@ export function getOrderRequest(numbers) {
             },
             body: JSON.stringify(numbers)
         })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Сервер не отвечает');
-            }
-            return res.json();
-        })
+        .then(checkResponse)
         .then(data => {
             return data;
-        })
-        .catch(e => {
-            return Promise.reject(e)
         })
 };
 
 export function getOrder(numbers) {
     return function(dispatch) {
-        dispatch({
-            type: GET_ORDER_REQUEST
-        })
+        dispatch(getOrderReq());
         getOrderRequest(numbers).then(res => {
             if (res && res.success) {
-                dispatch({
-                    type: GET_ORDER_SUCCESS,
-                    order: res.order.number
-                })
+                dispatch(getOrderSucc(res))
+                    .then(dispatch(afterOrderClearConstructor()));
             } else {
-                dispatch({
-                    type: GET_ORDER_ERROR
-                })
+                dispatch(getOrderError());
             }
         }).catch(err => {
-            dispatch({
-                type: GET_ORDER_ERROR
-            })
+            dispatch(getOrderError());
         })
     }
 }

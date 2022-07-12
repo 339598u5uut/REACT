@@ -1,4 +1,4 @@
-import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN, ARRAY_DRAG_MOVE } from "../actions";
+import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN, ARRAY_DRAG_MOVE, CLEAR_CONSTRUCTOR } from "../actions";
 
 const initialState = {
     ingredientBun: {},
@@ -39,6 +39,14 @@ export const ingredientReduce = (state = initialState, action) => {
                 return {
                     ...state,
                     ingredientItems: [...action.array],
+                }
+            }
+        case CLEAR_CONSTRUCTOR:
+            {
+                return {
+                    ...state,
+                    ingredientItems: initialState.ingredientItems,
+                    ingredientBun: initialState.ingredientBun,
                 }
             }
         default:

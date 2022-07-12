@@ -11,10 +11,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
-
   const dispatch = useDispatch();
-  const [data] = useState([]);
-
+ 
   useEffect(() => {
     // @ts-ignore
     dispatch(ingredients())
@@ -28,8 +26,8 @@ function App() {
           <p className={'text text_type_main-large mb-5'}>Соберите бургер</p>
           <div className={style.container}>
             <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients data={data} />
-              <BurgerConstructor data={data} />
+              <BurgerIngredients/>
+              <BurgerConstructor/>
             </DndProvider>
           </div>
         </section>

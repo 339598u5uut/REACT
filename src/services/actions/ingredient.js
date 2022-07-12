@@ -1,29 +1,23 @@
 import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN } from "."
+const { v4: uuidv4 } = require('uuid');
 
 export const addIngredient = (ingredient) => {
-    return function(dispatch) {
-        dispatch({
-            type: ADD_INGREDIENT,
-            array: ingredient,
-        })
+    return {
+        type: ADD_INGREDIENT,
+        array: {...ingredient, constructorId: uuidv4() },
     };
 }
 
 export const addIngredientBun = (ingredient) => {
-    return function(dispatch) {
-        dispatch({
-            type: ADD_BUN,
-            array: ingredient,
-        })
+    return {
+        type: ADD_BUN,
+        array: ingredient,
     };
 }
 
 export const deleteIngredient = (id) => {
-    return function(dispatch) {
-        dispatch({
-            type: DELETE_INGREDIENT,
-            id,
-
-        })
+    return {
+        type: DELETE_INGREDIENT,
+        id,
     };
 }
