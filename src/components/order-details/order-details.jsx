@@ -22,3 +22,4 @@ OrderDetails.propTypes = {
 }
 
 export default OrderDetails;
+

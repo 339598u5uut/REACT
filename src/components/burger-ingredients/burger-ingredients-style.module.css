@@ -27,6 +27,11 @@
     background-position: center;
 }
 
+.content_item {
+    display: flex;
+    align-items: center;
+}
+
 .ingredients_position {
     display: flex;
     flex-wrap: wrap;
@@ -46,12 +51,24 @@
 }
 
 .button {
+    position: relative;
     padding: 0;
     border: none;
     font: inherit;
     color: inherit;
     background-color: transparent;
     cursor: pointer;
+}
+
+.counter {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
 }
 
 ::-webkit-scrollbar {
