@@ -2,7 +2,7 @@ import React from 'react';
 import headerstyles from './app-header-style.module.css'
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 function AppHeader(props) {
 
   return (
@@ -27,7 +27,7 @@ function AppHeader(props) {
 
             <div className={headerstyles.icon}>
               <ProfileIcon type='secondary' />
-              <li className={'text text_type_main-default'}><a href={props.url} className={'pl-2'}>Личный кабинет</a></li>
+              <li className={'text text_type_main-default'}><Link to='/profile' className={'pl-2'}>Личный кабинет</Link></li>
             </div>
 
             <a className={headerstyles.logo} href={props.url}><Logo /></a>

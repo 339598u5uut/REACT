@@ -4,7 +4,7 @@ const initialState = {
     ingredient: {},
 };
 
-export const currentIngredientReduce = (state = initialState, action) => {
+export const currentIngredientReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_INGREDIENT:
             {
