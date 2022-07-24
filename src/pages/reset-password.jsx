@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Logo, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { recoveryPassword } from '../services/actions/reset-password';
+import { recoveryPassword } from '../services/actions/user';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';

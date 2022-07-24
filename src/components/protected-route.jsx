@@ -2,7 +2,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {useLocation} from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { getUser } from '../services/actions/get-user';
+import { getUser } from '../services/actions/user';
 
 export function ProtectedRoute({ children, ...rest }) {
 

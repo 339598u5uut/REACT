@@ -2,7 +2,7 @@ import React from 'react';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Link } from 'react-router-dom';
 import { Logo, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { createUser } from '../services/actions/register-user';
+import { createUser } from '../services/actions/user';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -30,8 +30,8 @@ function registerUser(event) {
 	
 };
 
-const requestCreateUserSuccess = useSelector(state => state.createUser.success);
-const user = useSelector(state => state.authorization.user);
+const createUserSuccess = useSelector(state => state.user.createUserSuccess);
+// const user = useSelector(state => state.authorization.user);
 
 // if (user) {
 //     return (
@@ -44,7 +44,7 @@ const user = useSelector(state => state.authorization.user);
 //     );
 //   };
 
-if (requestCreateUserSuccess) {
+if (createUserSuccess) {
     return (
       <Redirect
         to={{

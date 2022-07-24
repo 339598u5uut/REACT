@@ -31,7 +31,7 @@ function Modal(props) {
 Modal.propTypes = {
 	name: PropTypes.string,
 	isOpen: PropTypes.bool.isRequired,
-	onClose: PropTypes.func,
+	 onClose: PropTypes.bool.isRequired,
 }
 
 export default Modal;

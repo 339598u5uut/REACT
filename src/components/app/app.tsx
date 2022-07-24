@@ -9,14 +9,35 @@ import ForgotPassword from '../../pages/forgot-password';
 import ResetPassword from '../../pages/reset-password';
 import { ProtectedRoute } from '../protected-route';
 import ProfilePage from '../../pages/profile';
-
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { deleteIngredient } from '../../services/actions/ingredient-detales';
+import { useDispatch } from 'react-redux';
+import { openIngredientModal, closeIngredientModal } from '../../services/actions/ingredient-detales';
+import IngredientModalPage from '../../pages/page-modal-ingredient';
 
 function App() {
+ 
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  //@ts-ignore
+  const background = location.state && location.state.background;
+
+  const handleCloseModal = () => {
+		dispatch(deleteIngredient());
+		dispatch(closeIngredientModal());
+		history.goBack();
+	};
+
+
 
   return (  
    <> 
       <AppHeader />   
-      <Switch>
+      <Switch  location={background || location}>
         <Route path="/" exact={true}>
           <Main />
         </Route>
@@ -35,8 +56,27 @@ function App() {
         <ProtectedRoute path="/profile" exact={true}>
           <ProfilePage />
         </ProtectedRoute>
+        <Route path='/ingredients/:ingredientId' exact>
+          <IngredientDetails />
+        </Route>
+        <Route path='/ingredients/:id' exact={true}>
+                    <IngredientModalPage />
+                </Route>
       </Switch>
+
+      {background && (
+        <Route
+          path='/ingredients/:ingredientId'
+          children={
+            //@ts-ignore
+            <Modal isOpen={openIngredientModal()} onClose={() => handleCloseModal()}>
+            <IngredientDetails />
+          </Modal>
+          }
+        />
+      )}
       </>   
   )
 };
 export default App;
+

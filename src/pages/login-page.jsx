@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Logo, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { login } from '../services/actions/login';
+import { login } from '../services/actions/user';
 import { useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -26,7 +26,7 @@ function LoginPage() {
 		}
 
 
-const authorizationSuccess = useSelector(state => state.authorization.success);		
+const loginSuccess = useSelector(state => state.user.loginSuccess);		
 // const user = useSelector(state => state.authorization.user);
 
 // if (user) {
@@ -40,7 +40,7 @@ const authorizationSuccess = useSelector(state => state.authorization.success);
 //     );
 //   };
 
-	if (authorizationSuccess) {
+	if (loginSuccess===true) {
     return (
       <Redirect
         to={{
