@@ -1,22 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Logo, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { recoveryPassword } from '../services/actions/user';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
 
 function ResetPassword() {
-
-	const dispatch = useDispatch()
+	const history = useHistory();
+	const dispatch = useDispatch();
+	const forgotPassword = useSelector(state => state.user.forgotPasswordSuccess);
+	const request = useSelector(state => state.user.resetPasswordSuccess);
+	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
 
 	const [valueInput1, setValueInput1] = React.useState('');
-	const inputRef1 = React.useRef(null)
+	const inputRef1 = React.useRef(null);
 
 	const [valueInput2, setValueInput2] = React.useState('');
-	const inputRef2 = React.useRef(null)
+	const inputRef2 = React.useRef(null);
 
 	const onIconClick1 = () => {
 		setTimeout(() => inputRef1.current.focus(), 0);
@@ -26,8 +26,7 @@ function ResetPassword() {
 		setTimeout(() => inputRef2.current.focus(), 0);
 	}
 
-
-	function recoveryPass(event) {
+	function resetPass(event) {
 		event.preventDefault();
 		const data = {
 			"password": inputRef1.current.value,
@@ -38,25 +37,34 @@ function ResetPassword() {
 		setValueInput2('');
 	};
 
-	const request = useSelector(state => state.recoveryPassword.success);
-	const user = useSelector(state => state.authorization.user);
+	if (request === true) {
+		return (
+			<Redirect
+				to={{
+					pathname: '/login'
+				}}
+			/>
+		);
+	};
 
-// if (user) {
-//     return (
-//             // Переадресовываем авторизованного пользователя на главную страницу
-//       <Redirect
-//         to={{
-//           pathname: '/'
-//         }}
-//       />
-//     );
-//   };
+	if (isAuthenticated === true) {
+		return (
+			<Redirect
+				to={{
+					pathname: '/'
+				}}
+			/>
+		);
+	};
 
+	if (forgotPassword === false) {
+		history.replace({
+			pathname: '/forgot-password',
+		})
+	}
 
 	return (
-		request === true ?
-		(<Redirect to={{pathname: '/login'}}/>):(
-		<form className={`${loginStyle.container} ${'pb-10'}`} onSubmit={recoveryPass}>
+		<form className={`${loginStyle.container} ${'pb-10'}`} onSubmit={resetPass}>
 			<div className={loginStyle.wrapper}>
 				<p className="text text_type_main-medium">Восстановление пароля</p>
 
@@ -96,9 +104,7 @@ function ResetPassword() {
 					<Link to='/login'>Войти</Link></span>
 			</p>
 		</form>
-		)
 	)
-
 }
 
 export default ResetPassword;

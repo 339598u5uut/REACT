@@ -1,29 +1,26 @@
 import React from 'react';
 import profileStyle from './profile-style.module.css';
 import { Logo, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { logout } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, NavLink, Link } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { getUser, editUser, deleteUser } from '../services/actions/user';
-import { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useCallback } from 'react';
-
+import { Redirect, NavLink, useHistory, Link } from 'react-router-dom';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import { getUser, editUser, deleteUser, logout } from '../services/actions/user';
 
 function ProfilePage() {
 
 	const dispatch = useDispatch();
-	const inputRef = useRef(null)
+	const inputRef = useRef(null);
 	const history = useHistory();
 	const { name, email, password } = useSelector((state) => state.user.user);
+	const logoutSuccess = useSelector(state => state.user.logoutSuccess);
+	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
 
 	const [form, setForm] = useState({
 		name: name,
 		email: email,
 		password: password
 	});
-	
+
 	const onIconClick = () => {
 		setTimeout(() => inputRef.current.focus(), 0);
 	}
@@ -35,7 +32,6 @@ function ProfilePage() {
 	useEffect(() => {
 		setForm({ name, email, password })
 	}, [name, email, password]);
-
 
 	function formChange(e) {
 		setForm({
@@ -64,16 +60,11 @@ function ProfilePage() {
 		[logout, history]
 	);
 
-
 	const isChanged = useMemo(() => {
 		return name !== form.name || email !== form.email || password !== form.password;
 	}, [form, name, email, password]);
 
-
-	const logoutSuccess = useSelector(state => state.user.logoutSuccess);
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-
-	if (logoutSuccess === true) {
+	if (isAuthenticated === false || logoutSuccess === true) {
 		return (
 			<Redirect
 				to={{
@@ -121,7 +112,7 @@ function ProfilePage() {
 					placeholder={'Имя'}
 					onChange={formChange}
 					icon={'EditIcon'}
-					value={form.name}
+					value={form.name || ''}
 					name={'name'}
 					error={false}
 					ref={inputRef}
@@ -132,13 +123,13 @@ function ProfilePage() {
 
 				<EmailInput
 					onChange={formChange}
-					value={form.email}
+					value={form.email || ''}
 					name={'email'}
 				/>
 
 				<PasswordInput
 					onChange={formChange}
-					value={form.password}
+					value={form.password || ''}
 					name={'password'}
 				/>
 				{isChanged &&

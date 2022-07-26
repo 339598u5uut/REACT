@@ -1,42 +1,40 @@
 import React from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
-import { CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Tab, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from "react-dnd";
-import { getIngredient,openIngredientModal } from '../../services/actions/ingredient-detales';
-// import { deleteIngredient } from '../../services/actions/ingredient-detales';
-import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { getIngredient } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 
 export const ingredientsSelector = (state = {}) => state.ingredients.ingredients;
 
 const Product = (props) => {
 
-	const { count,openModal } = props;
+	const { count } = props;
 	const location = useLocation();
-	 let ingredientId = props._id;
-	
+	let ingredientId = props._id;
 
 	const [, dragRef] = useDrag({
 		type: 'ingredient',
 		item: { _id: props._id },
 	})
-	
+
+	const onClick = () => {
+		localStorage.setItem('ingredient', JSON.stringify(props))
+	}
+
 	return (
 		<>
 			<Link
-				to={{ pathname: `/ingredients/${ingredientId}`, 
-				state: { background: location },
-				
-			 }}
+				to={{
+					pathname: `/ingredients/${ingredientId}`,
+					state: { background: location },
+
+				}}
 			>
-				<li className={`${mainstyles.item} ${'p-1'}`} onClick={() => openModal(props)} ref={dragRef}>
+				<li className={`${mainstyles.item} ${'p-1'}`} onClick={onClick} ref={dragRef}>
 					{count !== 0 ?
 						<div className={mainstyles.counter}><Counter count={count} size="default" /></div> : <></>}
 					<img src={props.image} alt={props.name} />
@@ -46,10 +44,9 @@ const Product = (props) => {
 					</div>
 					<p className={'text text_type_main-small'}>{props.name}</p>
 				</li>
-			</Link>			
+			</Link>
 		</>
 	)
-	
 }
 
 const allIngredientsSelector = createSelector((state) => state.ingredient,
@@ -64,15 +61,12 @@ const allIngredientsSelector = createSelector((state) => state.ingredient,
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
 	const dispatch = useDispatch();
-	
 	const ingredients = useSelector(ingredientsSelector);
 	const userIngredients = useSelector(allIngredientsSelector);
 
-	
 
-	function handleOpenModal(props){
+	function handleOpenModal(props) {
 		dispatch(getIngredient(props));
-		dispatch(openIngredientModal(props));
 	};
 
 	function handleScroll(e) {
@@ -89,10 +83,7 @@ function BurgerIngredients() {
 		}
 	}
 
-	
-
 	const counter = userIngredients.reduce((acc, cur) => {
-
 		if (acc[cur._id]) {
 			return {
 				...acc,
@@ -105,7 +96,6 @@ function BurgerIngredients() {
 			}
 		}
 	}, {});
-
 
 	const bun = ingredients.filter(element => element.type === "bun");
 	const sauce = ingredients.filter(element => element.type === "sauce");
@@ -139,26 +129,23 @@ function BurgerIngredients() {
 				<div className={mainstyles.ingredients}  >
 					<div className={mainstyles.wrapper} onScroll={handleScroll}>
 
-
 						<p className={'text text_type_main-medium'} id='bun'>Булки</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!bun.length &&
-								bun.map((bun, _id) => <Product key={bun._id} {...bun} count={counter[bun._id] || 0} openModal={handleOpenModal}/>)}
+								bun.map((bun, _id) => <Product key={bun._id} {...bun} count={counter[bun._id] || 0} openModal={handleOpenModal} />)}
 						</ul>
-
 
 						<p className={'text text_type_main-medium'} id='sauce'>Соусы</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!sauce.length &&
-								sauce.map((sauce, _id) => <Product key={sauce._id} {...sauce} count={counter[sauce._id] || 0} openModal={handleOpenModal}/>)}
+								sauce.map((sauce, _id) => <Product key={sauce._id} {...sauce} count={counter[sauce._id] || 0} openModal={handleOpenModal} />)}
 						</ul>
 
 						<p className={'text text_type_main-medium'} id='main'>Начинки</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!main.length &&
-								main.map((main, _id) => <Product key={main._id}{...main} count={counter[main._id] || 0} openModal={handleOpenModal}/>)}
+								main.map((main, _id) => <Product key={main._id}{...main} count={counter[main._id] || 0} openModal={handleOpenModal} />)}
 						</ul>
-
 
 					</div >
 				</div>

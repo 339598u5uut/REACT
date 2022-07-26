@@ -35,3 +35,7 @@
     align-items: center;
     cursor: pointer;
 }
+
+.active {
+    color: var(--text-primary-color);
+}

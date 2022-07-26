@@ -1,9 +1,9 @@
 import React from 'react';
 import headerstyles from './app-header-style.module.css'
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-function AppHeader(props) {
+import { Link, NavLink } from 'react-router-dom';
+
+function AppHeader() {
 
   return (
     <header className={`${headerstyles.header} ${'mb-10'}`}>
@@ -14,34 +14,54 @@ function AppHeader(props) {
             <div className={headerstyles.list2}>
 
               <div className={headerstyles.icon}>
-                <BurgerIcon type='primary' />
-                <li className={'text text_type_main-default'}><a href={props.url}>Конструктор</a></li>
+                <BurgerIcon type='secondary' />
+                <li className={'text text_type_main-default'}>
+                  <NavLink
+                    activeClassName={headerstyles.active}
+                    to={{ pathname: '/' }}
+                    exact={true}
+                  >Конструктор
+                  </NavLink>
+
+                </li>
               </div>
 
               <div className={headerstyles.icon}>
                 <ListIcon type='secondary' />
-                <li className={'text text_type_main-default'}><a href={props.url} className={'pl-2'}>Лента заказов</a></li>
+                <li className={'text text_type_main-default'}>
+                  <NavLink
+                    activeClassName={headerstyles.active}
+                    to={{ pathname: '/not-found' }}
+                    exact={true}
+                    className={'pl-2'}
+                  >Лента заказов
+                  </NavLink>
+                </li>
               </div>
 
             </div>
 
             <div className={headerstyles.icon}>
               <ProfileIcon type='secondary' />
-              <li className={'text text_type_main-default'}><Link to='/profile' className={'pl-2'}>Личный кабинет</Link></li>
+              <li className={'text text_type_main-default'}>
+                <NavLink
+                  activeClassName={headerstyles.active}
+                  to={{ pathname: '/profile' }}
+                  className={'pl-2'}>
+                  Личный кабинет
+                </NavLink>
+              </li>
             </div>
 
-            <a className={headerstyles.logo} href={props.url}><Logo /></a>
+            <Link to='/' className={headerstyles.logo}>
+              <Logo />
+            </Link>
           </ul>
         </nav>
 
       </div>
     </header>
   );
-}
-
-AppHeader.propTypes = {
-  className: PropTypes.string,
-  url: PropTypes.string,
 }
 
 export default AppHeader;

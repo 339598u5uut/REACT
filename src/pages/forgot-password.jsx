@@ -1,22 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Logo, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/actions/user';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Redirect } from "react-router-dom";
 
 function ForgotPassword() {
-
 	const [value, setValue] = useState('');
-
-
 	const inputRef = React.useRef(null)
 	const dispatch = useDispatch();
+	const request = useSelector(state => state.user.forgotPasswordSuccess);
+	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
 
-	
 	function sendEmail(event) {
 		event.preventDefault();
 		let email = {
@@ -26,28 +22,23 @@ function ForgotPassword() {
 		setValue('');
 	};
 
-	
-	const requestResetPassword = useSelector(state => state.resetPassword.success);
-	// const user = useSelector(state => state.authorization.user);
+	if (isAuthenticated === true) {
+		return (
+			<Redirect
+				to={{
+					pathname: '/'
+				}}
+			/>
+		);
+	};
 
-	// if (user) {
-	// 	return (
-	// 			// Переадресовываем авторизованного пользователя на главную страницу
-	// 	  <Redirect
-	// 		to={{
-	// 		  pathname: '/'
-	// 		}}
-	// 	  />
-	// 	);
-	//   };
-
-if(requestResetPassword) {
-	return (
-		<Redirect
-		  to={'/login'}
-		/>
-	  )
-}
+	if (request === true) {
+		return (
+			<Redirect
+				to={'/reset-password'}
+			/>
+		)
+	}
 
 	return (
 
@@ -60,10 +51,9 @@ if(requestResetPassword) {
 					placeholder={'Укажите e-mail'}
 					value={value}
 					ref={inputRef}
-					onChange={(event) => 
-						setValue(event.target.value)}																				
+					onChange={(event) => setValue(event.target.value)}
 					name={'name'}
-					error={false}			
+					error={false}
 					errorText={'Ошибка'}
 					size={'default'}
 				/>

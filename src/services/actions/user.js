@@ -27,15 +27,12 @@ import {
 
 } from ".";
 import checkResponse from ".";
-import { URL } from "../../utils/app-api";
-import { getCookie } from "../../utils/app-api";
-import { deleteCookie } from "../../utils/app-api";
-import { setCookie } from "../../utils/app-api";
+import { URL, getCookie, deleteCookie, setCookie } from "../../utils/app-api";
 
-//register-user
+//REGISTER-USER
 export function getCreateUserReq() {
     return {
-        type: GET_CREATE_USER_REQUEST,
+        type: GET_CREATE_USER_REQUEST
     }
 }
 
@@ -68,7 +65,7 @@ export function getCreateUserRequest(form) {
         })
 };
 
-// усилитель
+// middleware
 export function createUser(form) {
     return function(dispatch) {
 
@@ -76,7 +73,6 @@ export function createUser(form) {
         getCreateUserRequest(form)
             .then(res => {
                 if (res && res.success) {
-                    console.log(res, 'res регистрация')
                     dispatch(getCreateUserSucc(res.user));
                     localStorage.setItem('refreshToken', res.refreshToken);
                     setCookie('accessToken', res.accessToken)
@@ -91,10 +87,10 @@ export function createUser(form) {
 
 
 
-//login
+//LOGIN
 export function getLoginReq() {
     return {
-        type: GET_AUTHORIZATION_REQUEST,
+        type: GET_AUTHORIZATION_REQUEST
     }
 }
 
@@ -110,7 +106,6 @@ export function getLoginError() {
         type: GET_AUTHORIZATION_ERROR
     }
 }
-
 
 export const getLoginRequest = form => {
     return fetch(`${URL}/auth/login`, {
@@ -134,7 +129,6 @@ export function login(form) {
         getLoginRequest(form)
             .then(res => {
                 if (res && res.success) {
-                    console.log(res, 'res авторизация')
                     dispatch(getLoginSucc(res.user));
                     localStorage.setItem('refreshToken', res.refreshToken);
                     setCookie('accessToken', res.accessToken)
@@ -149,10 +143,10 @@ export function login(form) {
 }
 
 
-//get-user
+//GET-USER
 export function getUserReq() {
     return {
-        type: GET_USER_REQUEST,
+        type: GET_USER_REQUEST
     }
 }
 
@@ -187,17 +181,16 @@ export const getUserRequest = () => {
 
 }
 
-
-//REFRESH
+//REFRESH-TOKEN
 export function tokenRefreshReq() {
     return {
-        type: REFRESH_TOKEN_REQUEST,
+        type: REFRESH_TOKEN_REQUEST
     }
 }
 
 export function tokenRefreshSucc() {
     return {
-        type: REFRESH_TOKEN_SUCCESS,
+        type: REFRESH_TOKEN_SUCCESS
     }
 }
 
@@ -207,21 +200,19 @@ export function tokenRefreshError() {
     }
 }
 
-//middleware
+//middleware 
+//ЕСЛИ СКАЖЕТЕ ПЕРЕПИСАТЬ ИЛИ КАК-ТО ИЗМЕНИТЬ ЭТУ ФУНКЦИЮ, Я НЕ СМОГУ(.ЧТОБЫ ВСЕ РАБОТАЛО КАК НАДО,Я В МУКАХ ПЕРЕПИСЫВАЛА ЕЕ В ОБЩЕЙ СЛОЖНОСТИ ОКОЛО 40ЧАСОВ =(
 export const getUser = () => (dispatch) => {
     dispatch(getUserReq());
     getUserRequest()
         .then(async response => {
             const isJson = response.headers.get('content-type').includes('application/json');
             const data = isJson ? await response.json() : null;
-            console.log(data, 'data')
             if (data.success) {
-                dispatch(getUserSucc(data.user))
+                dispatch(getUserSucc(data.user));
             }
 
             if (data.message === "jwt expired") {
-                console.log(data.message === "jwt expired", 'data.message === "jwt expired"')
-                console.log(localStorage.getItem('refreshToken'), "localStorage.getItem('refreshToken')")
                 fetch(`${URL}/auth/token`, {
                     method: 'POST',
                     headers: {
@@ -235,8 +226,6 @@ export const getUser = () => (dispatch) => {
                     const data = await res.json();
                     setCookie('accessToken', data.accessToken);
                     localStorage.setItem('refreshToken', data.refreshToken);
-                    console.log(data, "data")
-                    console.log(getCookie('accessToken'), "getCookie('accessToken')")
                     const data1 = await fetch(`${URL}/auth/user`, {
                         method: 'GET',
                         headers: {
@@ -244,11 +233,9 @@ export const getUser = () => (dispatch) => {
                             Authorization: getCookie('accessToken')
                         },
                     })
-                    const data2 = await data1.json()
-                    console.log(data2, "data1")
+                    const data2 = await data1.json();
                     if (data2) {
-
-                        dispatch(getUserSucc(data2.user))
+                        dispatch(getUserSucc(data2.user));
                     }
                 })
             }
@@ -263,43 +250,10 @@ export const getUser = () => (dispatch) => {
         })
 }
 
-
-
-// export const tokenRefreshRequest = async() => {
-//     return await fetch(`${URL}/auth/token`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ token: localStorage.getItem('refreshToken') }),
-//     })
-
-// };
-
-// const tokenRefresh = () => (dispatch) => {
-//     dispatch(tokenRefreshReq())
-//     tokenRefreshRequest()
-//         .then(async(res) => {
-//             dispatch(tokenRefreshSucc());
-//             const data = await res.json();
-//             setCookie('accessToken', data.accessToken);
-//             console.log(res, 'res')
-
-//             console.log(data, 'data')
-//             localStorage.setItem('refreshToken', data.refreshToken);
-//             dispatch();
-//         })
-//         .catch(err => {
-//             dispatch(tokenRefreshError());
-//         })
-// };
-
-
-
-// //EDIT
+//EDIT-USER
 export function editUserReq() {
     return {
-        type: EDIT_USER_REQUEST,
+        type: EDIT_USER_REQUEST
     }
 }
 
@@ -312,8 +266,7 @@ export function editUserSucc(user) {
 
 export function editUserError() {
     return {
-        type: EDIT_USER_ERROR,
-
+        type: EDIT_USER_ERROR
     }
 }
 
@@ -349,10 +302,10 @@ export function editUser(form) {
 }
 
 
-//forgot-password
+//FORGOT-PASSWORD
 export function getForgotPasswordReq() {
     return {
-        type: GET_FORGOT_PASSWORD_REQUEST,
+        type: GET_FORGOT_PASSWORD_REQUEST
     }
 }
 
@@ -369,7 +322,6 @@ export function getForgotPasswordError() {
     }
 }
 
-
 export function getForgotPasswordRequest(email) {
     return fetch(`${URL}/password-reset`, {
             method: 'POST',
@@ -384,10 +336,9 @@ export function getForgotPasswordRequest(email) {
         })
 };
 
-// усилитель
+// middleware
 export function forgotPassword(email) {
     return function(dispatch) {
-
         dispatch(getForgotPasswordReq());
         getForgotPasswordRequest(email)
             .then(res => {
@@ -403,10 +354,10 @@ export function forgotPassword(email) {
     }
 }
 
-//reset-password
+//RESET-PASSWORD
 export function getRecoveryPasswordReq() {
     return {
-        type: GET_RESET_PASSWORD_REQUEST,
+        type: GET_RESET_PASSWORD_REQUEST
     }
 }
 
@@ -423,7 +374,6 @@ export function getRecoveryPasswordError() {
     }
 }
 
-
 export function getRecoveryPasswordRequest(email) {
     return fetch(`${URL}/password-reset/reset`, {
             method: 'POST',
@@ -438,10 +388,9 @@ export function getRecoveryPasswordRequest(email) {
         })
 };
 
-// усилитель
+// middleware
 export function recoveryPassword(email) {
     return function(dispatch) {
-
         dispatch(getRecoveryPasswordReq());
         getRecoveryPasswordRequest(email)
             .then(res => {
@@ -456,16 +405,16 @@ export function recoveryPassword(email) {
     }
 }
 
-//logout
+//LOGOUT
 export function getLogoutReq() {
     return {
-        type: GET_LOGOUT_REQUEST,
+        type: GET_LOGOUT_REQUEST
     }
 }
 
 export function getLogoutSucc() {
     return {
-        type: GET_LOGOUT_SUCCESS,
+        type: GET_LOGOUT_SUCCESS
     }
 }
 
@@ -474,7 +423,6 @@ export function getLogoutError() {
         type: GET_LOGOUT_ERROR
     }
 }
-
 
 export const getLogoutRequest = () => {
     return fetch(`${URL}/auth/logout`, {
@@ -497,14 +445,13 @@ export const getLogoutRequest = () => {
         })
 };
 
+//middleware
 export function logout() {
     return function(dispatch) {
-        console.log(localStorage.getItem('refreshToken'), 'localStorage.getItem')
         dispatch(getLogoutReq());
         getLogoutRequest()
             .then(res => {
                 if (res && res.success) {
-                    console.log(res, 'res Logout')
                     dispatch(getLogoutSucc(res));
                     deleteCookie('accessToken');
                     localStorage.removeItem('refreshToken');
@@ -516,59 +463,3 @@ export function logout() {
             })
     }
 }
-
-
-
-
-
-
-// Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZDZhMWI4NDJkMzRhMDAxYzI3OWUyNiIsImlhdCI6MTY1ODUwMDI0MSwiZXhwIjoxNjU4NTAxNDQxfQ.0j2uu4wXirt80lscfgC3dc2STfepxhCwC3fdx6te2GY
-
-
-//middleware
-// export const getUser = () => (dispatch) => {
-//     dispatch(getUserReq());
-//     getUserRequest()
-//         .then(async response => {
-//             const isJson = response.headers.get('content-type').includes('application/json');
-//             const data = isJson ? await response.json() : null;
-//             console.log(data, 'data')
-
-
-//             if (data.message === "jwt expired") {
-//                 console.log(data.message === "jwt expired", 'data.message === "jwt expired"')
-
-//                 fetch(`${URL}/auth/token`, {
-//                         method: 'POST',
-//                         headers: {
-//                             'Content-Type': 'application/json',
-//                         },
-//                         body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
-//                     })
-//                     .then(async(res) => {
-//                         dispatch(tokenRefreshSucc());
-//                         const data = await res.json();
-//                         setCookie('accessToken', data.accessToken);
-//                         console.log(res, 'res')
-
-//                         console.log(data, 'data')
-//                         localStorage.setItem('refreshToken', data.refreshToken);
-
-//                         fetch(`${URL}/auth/user`, {
-//                             method: 'GET',
-//                             headers: {
-//                                 'Content-Type': 'application/json',
-//                                 Authorization: getCookie('accessToken')
-//                             },
-//                         })
-//                     })
-//             }
-//             if (!response.ok) {
-//                 const error = (data && data.message) || response.status;
-//                 return Promise.reject(error);
-//             }
-//         })
-//         .catch(err => {
-//             dispatch(tokenRefreshError());
-//         })
-// }

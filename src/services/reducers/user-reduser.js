@@ -75,11 +75,9 @@ const initialState = {
     resetPasswordMessage: '',
     resetPasswordRequest: false,
     resetPasswordError: false,
-
 };
 
 export const userReducer = (state = initialState, action) => {
-    console.log(action, "action")
     switch (action.type) {
         case GET_USER_REQUEST:
             {

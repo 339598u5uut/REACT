@@ -11,13 +11,13 @@ export const addIngredient = (ingredient) => {
 export const addIngredientBun = (ingredient) => {
     return {
         type: ADD_BUN,
-        array: ingredient,
+        array: ingredient
     };
 }
 
 export const deleteIngredient = (id) => {
     return {
         type: DELETE_INGREDIENT,
-        id,
+        id
     };
 }

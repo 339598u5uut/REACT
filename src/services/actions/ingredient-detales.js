@@ -19,7 +19,7 @@ export const deleteIngredient = () => {
 
 export const openIngredientModal = () => {
     return {
-        type: OPEN_INGREDIENT_MODAL,
+        type: OPEN_INGREDIENT_MODAL
     }
 }
 

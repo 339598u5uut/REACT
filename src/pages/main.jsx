@@ -15,7 +15,7 @@ function Main() {
 	useEffect(() => {
 		// @ts-ignore
 		dispatch(ingredients())
-	}, [dispatch]);
+	}, []);
 
 	return (
 		<div className="App">		

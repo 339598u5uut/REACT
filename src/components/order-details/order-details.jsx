@@ -1,8 +1,9 @@
 import React from 'react';
 import styledetails from './order-details-style.module.css';
 import PropTypes from "prop-types";
-import done from '../../images/done.png'
+import done from '../../images/done.png';
 function OrderDetails(props) {
+	
 	return (
 		<div className={styledetails.container}>
 			<p className={'text text_type_digits-large mb-8'}>{props.number}</p>
