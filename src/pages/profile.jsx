@@ -2,9 +2,9 @@ import React from 'react';
 import profileStyle from './profile-style.module.css';
 import { Logo, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, NavLink, useHistory, Link } from 'react-router-dom';
-import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
-import { getUser, editUser, deleteUser, logout } from '../services/actions/user';
+import { NavLink, useHistory } from 'react-router-dom';
+import { useEffect, useState, useRef, useMemo } from 'react';
+import {  editUser, deleteUser, logout } from '../services/actions/user';
 
 function ProfilePage() {
 
@@ -12,8 +12,6 @@ function ProfilePage() {
 	const inputRef = useRef(null);
 	const history = useHistory();
 	const { name, email, password } = useSelector((state) => state.user.user);
-	const logoutSuccess = useSelector(state => state.user.logoutSuccess);
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
 
 	const [form, setForm] = useState({
 		name: name,
@@ -24,10 +22,6 @@ function ProfilePage() {
 	const onIconClick = () => {
 		setTimeout(() => inputRef.current.focus(), 0);
 	}
-
-	useEffect(() => {
-		dispatch(getUser());
-	}, []);
 
 	useEffect(() => {
 		setForm({ name, email, password })
@@ -50,29 +44,17 @@ function ProfilePage() {
 		setForm({ name, email, password })
 	}
 
-	const exit = useCallback(
-		(e) => {
-			e.preventDefault();
-			dispatch(logout());
-			deleteUser();
-			history.replace({ pathname: '/login' });
-		},
-		[logout, history]
-	);
+	const exit = (e) => {
+		console.log('вместо коллбэка')
+		e.preventDefault();
+		dispatch(logout());
+		dispatch(deleteUser());
+		history.replace({ pathname: '/login' });		
+	}
 
 	const isChanged = useMemo(() => {
 		return name !== form.name || email !== form.email || password !== form.password;
 	}, [form, name, email, password]);
-
-	if (isAuthenticated === false || logoutSuccess === true) {
-		return (
-			<Redirect
-				to={{
-					pathname: '/login'
-				}}
-			/>
-		);
-	};
 
 	return (
 		<div className={`${profileStyle.container} ${'pb-10'}`}>

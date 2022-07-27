@@ -66,7 +66,7 @@ function App() {
           children={
             //@ts-ignore
             <Modal onClose={() => handleCloseModal()}>
-              <IngredientDetails />
+              <IngredientDetails/>
             </Modal>
           }
         />

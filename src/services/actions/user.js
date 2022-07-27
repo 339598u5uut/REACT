@@ -212,20 +212,25 @@ export const getUser = () => (dispatch) => {
                 dispatch(getUserSucc(data.user));
             }
 
-            if (data.message === "jwt expired") {
-                fetch(`${URL}/auth/token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
-                })
 
-                .then(async(res) => {
+            if (data.message === "jwt expired") {
+                try {
+                    const authTokenResponse = await fetch(`${URL}/auth/token`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
+                    })
+
+                    const authToken = await authTokenResponse.json();
+
+
                     dispatch(tokenRefreshSucc());
-                    const data = await res.json();
-                    setCookie('accessToken', data.accessToken);
-                    localStorage.setItem('refreshToken', data.refreshToken);
+
+                    setCookie('accessToken', authToken?.accessToken);
+                    localStorage.setItem('refreshToken', authToken?.refreshToken);
+
                     const data1 = await fetch(`${URL}/auth/user`, {
                         method: 'GET',
                         headers: {
@@ -237,7 +242,10 @@ export const getUser = () => (dispatch) => {
                     if (data2) {
                         dispatch(getUserSucc(data2.user));
                     }
-                })
+                } catch (err) {
+                    dispatch(tokenRefreshError());
+                    dispatch(getUserError(err));
+                }
             }
             if (!response.ok) {
                 const error = (data && data.message) || response.status;

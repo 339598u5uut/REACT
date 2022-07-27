@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Logo, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { login } from '../services/actions/user';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../services/actions/user';
 
 function LoginPage() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const [form, setValue] = useState({ "email": '', "password": '' });
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-	const loginSuccess = useSelector(state => state.user.loginSuccess);
+
+	useEffect(() => {
+		dispatch(getUser())
+		console.log("sdfgghhjjklggg")
+	}, []);
 
 	const onChange = e => {
 		setValue({ ...form, [e.target.name]: e.target.value });
@@ -22,21 +26,15 @@ function LoginPage() {
 		dispatch(login(form));
 	}
 
-	if (isAuthenticated === true) {
-		return (
-			<Redirect
-				to={{
-					pathname: location?.state?.from || '/'
-				}}
-			/>
-		);
-	};
+	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+	const loginSuccess = useSelector(state => state.user.loginSuccess);
 
-	if (loginSuccess === true) {
+	if (isAuthenticated === true || loginSuccess === true) {
+		console.log("редирект")
 		return (
 			<Redirect
 				to={{
-					pathname: '/'
+					pathname: location?.state?.from?.pathname ?? '/'
 				}}
 			/>
 		);
@@ -65,12 +63,12 @@ function LoginPage() {
 			</div>
 
 			<p className="text text_type_main-default text_color_inactive mb-4">
-				<span className='pr-2'>Вы — новый пользователь?</span>
+				<span className='pr-2'>Вы — новый пользователь?</span>
 				<span className={loginStyle.description}>
 					<Link to='/register'>Зарегистрироваться</Link></span>
 
 			</p>
-			
+
 			<p className="text text_type_main-default text_color_inactive mb-4">
 				<span className='pr-2'>Забыли пароль?</span>
 				<span className={loginStyle.description}>
@@ -78,7 +76,6 @@ function LoginPage() {
 			</p>
 		</form>
 	)
-
 }
 
 export default LoginPage;

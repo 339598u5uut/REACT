@@ -1,8 +1,19 @@
 import styledetails from './ingredient-details-style.module.css';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 export function IngredientDetails() {
 
-	const ingredient = JSON.parse(localStorage.getItem('ingredient'));
+	const [ingredient, setIngredient] = useState({})
+	const allIngredients = useSelector(state => state.ingredients.ingredients);
+	const { id } = useParams();
+
+	useEffect(() => {
+		if (!id || allIngredients?.lenght < 1) return;
+		const findIngredient = allIngredients.find(i => i._id === id);
+		findIngredient && setIngredient(findIngredient)
+	}, [id, allIngredients]);
 
 	return (
 		<div className={styledetails.container}>

@@ -10,7 +10,7 @@ function RegisterPage() {
 	const dispatch = useDispatch()
 	const inputRef = React.useRef(null)
 	const createUserSuccess = useSelector(state => state.user.createUserSuccess);
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+	
 	const [form, setValue] = useState({ "email": '', "password": '', 'name': '' });
 
 	const onIconClick = () => {
@@ -27,6 +27,8 @@ function RegisterPage() {
 		setValue('');
 	};
 
+	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+	
 	if (isAuthenticated === true || createUserSuccess === true) {
 		return (
 			<Redirect

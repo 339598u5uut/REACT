@@ -39,7 +39,7 @@ const initialState = {
         name: '',
         password: ''
     },
-    isAuthenticated: false,
+    isAuthenticated: null,
 
     getUserMessage: '',
     getUserSuccess: false,
@@ -55,7 +55,8 @@ const initialState = {
     loginRequest: false,
     loginError: false,
 
-    logoutSuccess: false,
+
+    logoutSuccess: null,
     logoutRequest: false,
     logoutError: false,
 
@@ -78,6 +79,7 @@ const initialState = {
 };
 
 export const userReducer = (state = initialState, action) => {
+    console.log(action, 'userReducer')
     switch (action.type) {
         case GET_USER_REQUEST:
             {
@@ -116,8 +118,8 @@ export const userReducer = (state = initialState, action) => {
         case DELETE_USER:
             {
                 return {
-                    ...state,
-                    user: initialState.user,
+                    ...initialState,
+
 
                 };
             }
@@ -305,6 +307,7 @@ export const userReducer = (state = initialState, action) => {
                     logoutSuccess: true,
                     logoutRequest: false,
                     logoutError: false,
+                    isAuthenticated: false,
                 };
             }
         case GET_LOGOUT_ERROR:
