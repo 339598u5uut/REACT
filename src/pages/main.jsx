@@ -14,7 +14,7 @@ function Main() {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		// @ts-ignore
-		dispatch(ingredients())
+		dispatch(ingredients());
 	}, []);
 
 	return (

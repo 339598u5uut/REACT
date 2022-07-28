@@ -21,20 +21,15 @@ const Product = (props) => {
 		item: { _id: props._id },
 	})
 
-	const onClick = () => {
-		localStorage.setItem('ingredient', JSON.stringify(props))
-	}
-
 	return (
 		<>
 			<Link
 				to={{
 					pathname: `/ingredients/${ingredientId}`,
 					state: { background: location },
-
 				}}
 			>
-				<li className={`${mainstyles.item} ${'p-1'}`} onClick={onClick} ref={dragRef}>
+				<li className={`${mainstyles.item} ${'p-1'}`} ref={dragRef}>
 					{count !== 0 ?
 						<div className={mainstyles.counter}><Counter count={count} size="default" /></div> : <></>}
 					<img src={props.image} alt={props.name} />
@@ -63,7 +58,6 @@ function BurgerIngredients() {
 	const dispatch = useDispatch();
 	const ingredients = useSelector(ingredientsSelector);
 	const userIngredients = useSelector(allIngredientsSelector);
-
 
 	function handleOpenModal(props) {
 		dispatch(getIngredient(props));
