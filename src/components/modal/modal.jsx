@@ -5,12 +5,13 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import PropTypes from "prop-types";
 import close from '../../images/icon.png';
 import { useSelector } from 'react-redux';
+
 const modalRoot = document.getElementById("react-modals");
 function Modal(props) {
-	const { isOpen, onClose } = props;
+	const { onClose } = props;
 	const isFetching = useSelector(state => state.order.isFetching);
-
-	return !isOpen ? null :
+	
+	return (	
 		ReactDOM.createPortal(
 			<div className={modalstyles.wrapper}>
 				<div className={modalstyles.container}>
@@ -25,12 +26,11 @@ function Modal(props) {
 				<ModalOverlay onClose={onClose} />
 			</div>,
 			modalRoot
-		)
+		))		
 }
 
 Modal.propTypes = {
 	name: PropTypes.string,
-	isOpen: PropTypes.bool.isRequired,
 	onClose: PropTypes.func,
 }
 

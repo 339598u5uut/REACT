@@ -1,39 +1,78 @@
 import React from 'react';
 import './app.module.css';
-import AppHeader from '../app-header/app-header.jsx';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor.jsx';
-import style from './app.module.css';
-import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Switch, Route, useLocation,useHistory } from 'react-router-dom';
+import Main from '../../pages/main';
+import LoginPage from '../../pages/login-page';
+import AppHeader from '../app-header/app-header';
+import RegisterPage from '../../pages/register-page';
+import ForgotPassword from '../../pages/forgot-password';
+import ResetPassword from '../../pages/reset-password';
+import { ProtectedRoute } from '../protected-route';
+import ProfilePage from '../../pages/profile';
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import { deleteIngredient,closeIngredientModal } from '../../services/actions/ingredient-detales';
 import { useDispatch } from 'react-redux';
-import { ingredients } from '../../services/actions/ingredients';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import IngredientModalPage from '../../pages/page-modal-ingredient';
+import NotFoundPage from '../../pages/not-found';
 
 function App() {
+
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
- 
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(ingredients())
-  }, [dispatch]);
+  //@ts-ignore
+  const background = location.state && location.state.background;
+
+  const handleCloseModal = () => {
+    dispatch(deleteIngredient());
+    dispatch(closeIngredientModal());
+    history.goBack();
+  };
 
   return (
-    <div className="App">
+    <>
       <AppHeader />
-      <main>
-        <section className={style.section}>
-          <p className={'text text_type_main-large mb-5'}>Соберите бургер</p>
-          <div className={style.container}>
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients/>
-              <BurgerConstructor/>
-            </DndProvider>
-          </div>
-        </section>
-      </main>
+      <Switch location={background || location}>
+        <Route path="/" exact={true}>
+          <Main />
+        </Route>
+        <Route path="/login" exact={true}>
+          <LoginPage />
+        </Route>
+        <Route path="/register" exact={true}>
+          <RegisterPage />
+        </Route>
+        <Route path="/forgot-password" exact={true}>
+          <ForgotPassword />
+        </Route>
+        <Route path="/reset-password" exact={true}>
+          <ResetPassword />
+        </Route>
+        <ProtectedRoute path="/profile" exact={true}>
+          <ProfilePage />
+        </ProtectedRoute>
+        <Route path='/ingredients/:id' exact={true}>
+          <IngredientModalPage />
+        </Route>
+        <Route path="/not-found" exact={true}>
+          <NotFoundPage />
+        </Route>
+      </Switch>
 
-    </div>
-  );
+      {background && (
+        <Route
+          path='/ingredients/:id'
+          children={
+            //@ts-ignore
+            <Modal onClose={() => handleCloseModal()}>
+              <IngredientDetails/>
+            </Modal>
+          }
+        />
+      )}
+    </>
+  )
 };
 export default App;
+

@@ -1,10 +1,17 @@
-import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR, CLEAR_CONSTRUCTOR } from ".";
+import {
+    GET_ORDER_REQUEST,
+    GET_ORDER_SUCCESS,
+    GET_ORDER_ERROR,
+    CLEAR_CONSTRUCTOR,
+    OPEN_ORDER_MODAL,
+    CLOSE_ORDER_MODAL
+} from ".";
 import checkResponse from ".";
 import { URL } from "../../utils/app-api";
 
 export function getOrderReq() {
     return {
-        type: GET_ORDER_REQUEST,
+        type: GET_ORDER_REQUEST
     }
 }
 
@@ -54,5 +61,17 @@ export function getOrder(numbers) {
         }).catch(err => {
             dispatch(getOrderError());
         })
+    }
+}
+
+export const openOrderModal = () => {
+    return {
+        type: OPEN_ORDER_MODAL
+    }
+}
+
+export const closeOrderModal = () => {
+    return {
+        type: CLOSE_ORDER_MODAL
     }
 }

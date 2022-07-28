@@ -5,7 +5,7 @@ const initialState = {
     ingredientItems: [],
 };
 
-export const ingredientReduce = (state = initialState, action) => {
+export const ingredientReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_BUN:
             {

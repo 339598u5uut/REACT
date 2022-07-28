@@ -15,7 +15,7 @@ export const getIngredientsRequest = () => {
 
 export function getIngredientsReq() {
     return {
-        type: GET_INGREDIENTS_REQUEST,
+        type: GET_INGREDIENTS_REQUEST
     }
 }
 
@@ -32,10 +32,9 @@ export function getIngredientsError() {
     }
 }
 
-// усилитель
+// middleware
 export function ingredients() {
     return function(dispatch) {
-
         dispatch(getIngredientsReq());
         getIngredientsRequest()
             .then(res => {

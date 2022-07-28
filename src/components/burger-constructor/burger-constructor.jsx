@@ -9,9 +9,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getOrder } from '../../services/actions/order';
 import { addIngredient, addIngredientBun, deleteIngredient } from '../../services/actions/ingredient';
 import { useDrop, useDrag } from "react-dnd";
+import { getUser } from '../../services/actions/user';
 import { createSelector } from "reselect";
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
 import { ARRAY_DRAG_MOVE } from '../../services/actions';
+import { useHistory } from 'react-router-dom';
 
 let totalPrice = [];
 
@@ -61,7 +63,6 @@ function Layer({ index, moveIngredient, item }) {
 
 	const dragDropRef = dragRef(dropRef(ref));
 	return (
-
 		<li className={mainstyles.block} ref={dragDropRef} key={item.key}>
 			<DragIcon type='primary' />
 			<ConstructorElement
@@ -79,8 +80,9 @@ const BurgerConstructor = () => {
 
 	const [open, setOpen] = useState(false);
 	const dispatch = useDispatch();
-
 	const userIngredients = useSelector(userIngredientsSelector);
+	const order = useSelector(state => state.order.order);
+	const history = useHistory();
 
 	let userIngredientsId = {
 		"ingredients": []
@@ -88,14 +90,21 @@ const BurgerConstructor = () => {
 
 	for (let i = 0; i < userIngredients.length; i++) {
 		userIngredientsId.ingredients.push(userIngredients[i]._id)
+
 	};
 
 	function getCheckout(event) {
+		dispatch(getUser());
 		event.preventDefault();
-		dispatch(getOrder(userIngredientsId));
+		if (!localStorage.getItem('refreshToken')) {
+			history.replace({
+				pathname: '/login',
+			})
+		} else {
+			dispatch(getOrder(userIngredientsId));
+		}
 	};
 
-	const order = useSelector(state => state.order.order);
 	totalPrice = userIngredients.reduce((a, b) => a + b.price, 0);
 
 	//элемент form
@@ -187,8 +196,8 @@ const BurgerConstructor = () => {
 				</Button>
 			</div>
 
-			{order &&
-				<Modal isOpen={open} onClose={() => setOpen(false)}>
+			{order && open &&
+				<Modal onClose={() => setOpen(false)}>
 					<OrderDetails
 						number={`${order}`}
 						id='идентификатор заказа'

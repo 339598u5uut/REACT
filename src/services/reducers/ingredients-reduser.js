@@ -4,13 +4,11 @@ import {
     GET_INGREDIENTS_ERROR,
 } from '../actions';
 
-
 const initialState = {
     ingredients: [],
     ingredientsRequest: false,
     ingredientsError: false,
 };
-
 
 export const getAllIngredientsReducer = (state = initialState, action) => {
     switch (action.type) {

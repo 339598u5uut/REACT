@@ -1,8 +1,10 @@
 .container {
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
     padding: 15px 40px 60px 40px;
     justify-content: flex-end;
+    width: 640px;
     text-align: center;
     gap: 30px;
 }
