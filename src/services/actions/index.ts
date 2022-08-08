@@ -1,4 +1,3 @@
-import { TResponse } from "../../utils/types";
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const GET_INGREDIENTS_ERROR = 'GET_INGREDIENTS_ERROR';
@@ -55,7 +54,7 @@ export const REFRESH_TOKEN_REQUEST = 'REFRESH_TOKEN_REQUEST';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
 
-export default function checkResponse(res:TResponse) {
+export default function checkResponse(res:Response) {
     if (!res.ok) {
         throw new Error("Сервер не отвечает.");
     }
