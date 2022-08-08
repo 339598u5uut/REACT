@@ -79,7 +79,6 @@ const initialState = {
 };
 
 export const userReducer = (state = initialState, action) => {
-    console.log(action, 'userReducer')
     switch (action.type) {
         case GET_USER_REQUEST:
             {

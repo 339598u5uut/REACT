@@ -1,36 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect, useState, FC } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
-import { Logo, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { EmailInput, PasswordInput, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
 import { login } from '../services/actions/user';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../services/actions/user';
+import { RootState } from '../services/reducers/root-reducer';
+import { TForm, TLocationState } from '../utils/types';
 
-function LoginPage() {
+const Button: React.FC<{
+	type?: 'secondary' | 'primary';
+	size?: 'small' | 'medium' | 'large';
+	onClick?: (() => void) | ((e: SyntheticEvent) => void);
+	disabled?: boolean;
+	name?: string;
+	htmlType?: 'button' | 'submit' | 'reset';
+	className: string;
+	children: React.ReactNode;
+}> = ButtonUI;
+
+const LoginPage: FC = () => {
+
 	const dispatch = useDispatch();
-	const location = useLocation();
-	const [form, setValue] = useState({ "email": '', "password": '' });
+	const location = useLocation() as unknown as TLocationState;
+	const [form, setValue] = useState<TForm>({ "email": '', "password": '' });
 
 	useEffect(() => {
-		dispatch(getUser())
-		console.log("sdfgghhjjklggg")
-	}, []);
+		dispatch<any>(getUser())
+	}, [dispatch]);
 
-	const onChange = e => {
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setValue({ ...form, [e.target.name]: e.target.value });
 	};
 
-	const userLogin = (e) => {
+	const userLogin = (e: React.SyntheticEvent) => {
 		e.preventDefault();
-		dispatch(login(form));
+		dispatch<any>(login(form));
 	}
 
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-	const loginSuccess = useSelector(state => state.user.loginSuccess);
+	const isAuthenticated = useSelector((state:any) => state.user.isAuthenticated);
+	const loginSuccess = useSelector((state: any) => state.user.loginSuccess);
 
 	if (isAuthenticated === true || loginSuccess === true) {
-		console.log("редирект")
 		return (
 			<Redirect
 				to={{

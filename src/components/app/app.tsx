@@ -1,6 +1,5 @@
-import React from 'react';
 import './app.module.css';
-import { BrowserRouter as Router, Switch, Route, useLocation,useHistory } from 'react-router-dom';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import Main from '../../pages/main';
 import LoginPage from '../../pages/login-page';
 import AppHeader from '../app-header/app-header';
@@ -11,17 +10,18 @@ import { ProtectedRoute } from '../protected-route';
 import ProfilePage from '../../pages/profile';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { deleteIngredient,closeIngredientModal } from '../../services/actions/ingredient-detales';
+import { deleteIngredient, closeIngredientModal } from '../../services/actions/ingredient-detales';
 import { useDispatch } from 'react-redux';
 import IngredientModalPage from '../../pages/page-modal-ingredient';
 import NotFoundPage from '../../pages/not-found';
+import { FC } from 'react';
+import { TLocationState } from '../../utils/types';
 
-function App() {
+const App: FC = () => {
 
-  const location = useLocation();
+  const location = useLocation<TLocationState>();
   const history = useHistory();
   const dispatch = useDispatch();
-  //@ts-ignore
   const background = location.state && location.state.background;
 
   const handleCloseModal = () => {
@@ -64,9 +64,8 @@ function App() {
         <Route
           path='/ingredients/:id'
           children={
-            //@ts-ignore
-            <Modal onClose={() => handleCloseModal()}>
-              <IngredientDetails/>
+            <Modal onClose={() => handleCloseModal()} name={''}>
+              <IngredientDetails />
             </Modal>
           }
         />

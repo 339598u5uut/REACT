@@ -201,7 +201,6 @@ export function tokenRefreshError() {
 }
 
 //middleware 
-//ЕСЛИ СКАЖЕТЕ ПЕРЕПИСАТЬ ИЛИ КАК-ТО ИЗМЕНИТЬ ЭТУ ФУНКЦИЮ, Я НЕ СМОГУ(.ЧТОБЫ ВСЕ РАБОТАЛО КАК НАДО,Я В МУКАХ ПЕРЕПИСЫВАЛА ЕЕ В ОБЩЕЙ СЛОЖНОСТИ ОКОЛО 40ЧАСОВ =(
 export const getUser = () => (dispatch) => {
     dispatch(getUserReq());
     getUserRequest()
@@ -222,12 +221,8 @@ export const getUser = () => (dispatch) => {
                         },
                         body: JSON.stringify({ "token": localStorage.getItem('refreshToken') }),
                     })
-
                     const authToken = await authTokenResponse.json();
-
-
                     dispatch(tokenRefreshSucc());
-
                     setCookie('accessToken', authToken?.accessToken);
                     localStorage.setItem('refreshToken', authToken?.refreshToken);
 

@@ -1,24 +1,37 @@
-import React from 'react';
-import { Link, Redirect, useLocation } from 'react-router-dom';
+import React, { SyntheticEvent, useState,FC } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
-import { Logo, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/actions/user';
-import { useState } from 'react';
+import { RootState } from '../services/reducers/root-reducer';
 
-function ForgotPassword() {
+const Button: React.FC<{
+	type?: 'secondary' | 'primary';
+	size?: 'small' | 'medium' | 'large';
+	onClick?: (() => void) | ((e: SyntheticEvent) => void);
+	disabled?: boolean;
+	name?: string;
+	htmlType?: 'button' | 'submit' | 'reset';
+	className: string;
+	children: React.ReactNode;
+}> = ButtonUI;
+
+const ForgotPassword:FC=()=> {
+
 	const [value, setValue] = useState('');
-	const inputRef = React.useRef(null)
+	const inputRef = React.useRef<HTMLInputElement>(null)
 	const dispatch = useDispatch();
-	const request = useSelector(state => state.user.forgotPasswordSuccess);
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+	const request = useSelector((state: any) => state.user.forgotPasswordSuccess);
+	const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
 
-	function sendEmail(event) {
+	function sendEmail(event: { preventDefault: () => void; }) {
 		event.preventDefault();
 		let email = {
-			"email": inputRef.current.value
+			"email": inputRef!.current!.value
 		};
-		dispatch(forgotPassword(email));
+
+		dispatch<any>(forgotPassword(email));
 		setValue('');
 	};
 

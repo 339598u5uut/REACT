@@ -1,6 +1,7 @@
 import styleNotFound from './not-found-style.module.css';
+import { FC } from 'react';
 
-const NotFoundPage = () => {
+const NotFoundPage:FC = () => {
 	return (
 		<main>
 			<div className={styleNotFound.container}>

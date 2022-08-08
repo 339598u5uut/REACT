@@ -1,9 +1,9 @@
-import React from 'react';
 import headerstyles from './app-header-style.module.css'
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, NavLink } from 'react-router-dom';
+import { FC } from 'react';
 
-function AppHeader() {
+const AppHeader: FC = () => {
 
   return (
     <header className={`${headerstyles.header} ${'mb-10'}`}>
