@@ -1,17 +1,18 @@
-import React from 'react';
 import profileStyle from './profile-style.module.css';
-import { Logo, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useEffect, useState, useRef, useMemo } from 'react';
-import {  editUser, deleteUser, logout } from '../services/actions/user';
+import { useEffect, useState, useRef, useMemo, FC } from 'react';
+import { Button } from '../components/Button';
+import { editUser, deleteUser, logout } from '../services/actions/user';
+import { RootState } from '../services/reducers/root-reducer';
 
-function ProfilePage() {
+const ProfilePage: FC = () => {
 
 	const dispatch = useDispatch();
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const history = useHistory();
-	const { name, email, password } = useSelector((state) => state.user.user);
+	const { name, email, password } = useSelector((state: any) => state.user.user);
 
 	const [form, setForm] = useState({
 		name: name,
@@ -20,36 +21,36 @@ function ProfilePage() {
 	});
 
 	const onIconClick = () => {
-		setTimeout(() => inputRef.current.focus(), 0);
+		setTimeout(() => inputRef.current!.focus(), 0);
 	}
 
 	useEffect(() => {
 		setForm({ name, email, password })
 	}, [name, email, password]);
 
-	function formChange(e) {
+	function formChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setForm({
 			...form,
 			[e.target.name]: e.target.value,
 		});
 	}
 
-	function onSubmit(e) {
+	function onSubmit(e: React.SyntheticEvent) {
 		e.preventDefault();
-		dispatch(editUser(form));
+		dispatch<any>(editUser(form));
 	}
 
-	function cancelChanges(e) {
+	function cancelChanges(e: React.SyntheticEvent) {
 		e.preventDefault();
 		setForm({ name, email, password })
 	}
 
-	const exit = (e) => {
+	const exit = (e: React.SyntheticEvent) => {
 		console.log('вместо коллбэка')
 		e.preventDefault();
-		dispatch(logout());
+		dispatch<any>(logout());
 		dispatch(deleteUser());
-		history.replace({ pathname: '/login' });		
+		history.replace({ pathname: '/login' });
 	}
 
 	const isChanged = useMemo(() => {
@@ -124,7 +125,7 @@ function ProfilePage() {
 						<Button
 							type="primary"
 							size="medium"
-						>
+							className={''}>
 							Сохранить
 						</Button>
 

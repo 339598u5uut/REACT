@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
-import { CurrencyIcon, Tab, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { CurrencyIcon, Tab as TabUI, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from "react-dnd";
 import { getIngredient } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
 import { useLocation, Link } from 'react-router-dom';
+import { RootState } from '../../services/reducers/root-reducer';
+import { TIngredient, TReduceAcc, TReduceCur, TProduct } from '../../utils/types';
 
-export const ingredientsSelector = (state = {}) => state.ingredients.ingredients;
+export const Tab: FC<{
+	active: boolean;
+	value: string;
+	onClick: (value: string) => void;
+	children?: React.ReactNode;
+}> = TabUI;
 
-const Product = (props) => {
 
-	const { count } = props;
+export const ingredientsSelector = (state: any = {}) => state.ingredients.ingredients;
+
+const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal }) => {
 	const location = useLocation();
-	let ingredientId = props._id;
+	let ingredientId = _id;
 
 	const [, dragRef] = useDrag({
 		type: 'ingredient',
-		item: { _id: props._id },
+		item: { _id: _id },
 	})
 
 	return (
@@ -29,29 +36,29 @@ const Product = (props) => {
 					state: { background: location },
 				}}
 			>
-				<li className={`${mainstyles.item} ${'p-1'}`} ref={dragRef}>
+				<li className={`${mainstyles.item} ${'p-1'}`} ref={dragRef} {...handleOpenModal}>
 					{count !== 0 ?
 						<div className={mainstyles.counter}><Counter count={count} size="default" /></div> : <></>}
-					<img src={props.image} alt={props.name} />
+					<img src={image} alt={name} />
 					<div className={`${mainstyles.content_item}  ${'pb-2'}`}>
 						<CurrencyIcon type="primary" />
-						<span className={'text text_type_main-default pl-2'}>{props.price}</span>
+						<span className={'text text_type_main-default pl-2'}>{price}</span>
 					</div>
-					<p className={'text text_type_main-small'}>{props.name}</p>
+					<p className={'text text_type_main-small'}>{name}</p>
 				</li>
 			</Link>
 		</>
 	)
 }
 
-const allIngredientsSelector = createSelector((state) => state.ingredient,
+const allIngredientsSelector = createSelector((state: any) => state.ingredient,
 	({ ingredientItems, ingredientBun }) => {
-
 		if (ingredientBun && ingredientBun._id) {
 			return [...ingredientItems, ingredientBun]
 		}
 		return ingredientItems;
 	})
+
 
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
@@ -59,12 +66,12 @@ function BurgerIngredients() {
 	const ingredients = useSelector(ingredientsSelector);
 	const userIngredients = useSelector(allIngredientsSelector);
 
-	function handleOpenModal(props) {
+	const handleOpenModal = (props: TIngredient): void => {
 		dispatch(getIngredient(props));
 	};
 
-	function handleScroll(e) {
-		const target = e.target;
+	function handleScroll(e: React.SyntheticEvent<HTMLDivElement>) {
+		const target = e.target as HTMLElement;
 		const scrollTop = target.scrollTop;
 		if (scrollTop <= 265) {
 			setCurrent('one')
@@ -77,7 +84,7 @@ function BurgerIngredients() {
 		}
 	}
 
-	const counter = userIngredients.reduce((acc, cur) => {
+	const counter = userIngredients.reduce((acc: TReduceAcc, cur: TReduceCur) => {
 		if (acc[cur._id]) {
 			return {
 				...acc,
@@ -91,9 +98,9 @@ function BurgerIngredients() {
 		}
 	}, {});
 
-	const bun = ingredients.filter(element => element.type === "bun");
-	const sauce = ingredients.filter(element => element.type === "sauce");
-	const main = ingredients.filter(element => element.type === "main");
+	const bun: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "bun");
+	const sauce: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "sauce");
+	const main: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "main");
 
 	return (
 		<div className={mainstyles.menu}>
@@ -126,19 +133,19 @@ function BurgerIngredients() {
 						<p className={'text text_type_main-medium'} id='bun'>Булки</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!bun.length &&
-								bun.map((bun, _id) => <Product key={bun._id} {...bun} count={counter[bun._id] || 0} openModal={handleOpenModal} />)}
+								bun.map((bun, _id) => <Product src={''} key={bun._id} {...bun} count={counter[bun._id] || 0} handleOpenModal={handleOpenModal} />)}
 						</ul>
 
 						<p className={'text text_type_main-medium'} id='sauce'>Соусы</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!sauce.length &&
-								sauce.map((sauce, _id) => <Product key={sauce._id} {...sauce} count={counter[sauce._id] || 0} openModal={handleOpenModal} />)}
+								sauce.map((sauce, _id) => <Product src={''} key={sauce._id} {...sauce} count={counter[sauce._id] || 0} handleOpenModal={handleOpenModal} />)}
 						</ul>
 
 						<p className={'text text_type_main-medium'} id='main'>Начинки</p>
 						<ul className={`${mainstyles.ingredients_position} ${'mb-10'}`}>
 							{!!main.length &&
-								main.map((main, _id) => <Product key={main._id}{...main} count={counter[main._id] || 0} openModal={handleOpenModal} />)}
+								main.map((main, _id) => <Product src={''} key={main._id} {...main} count={counter[main._id] || 0} handleOpenModal={handleOpenModal} />)}
 						</ul>
 
 					</div >

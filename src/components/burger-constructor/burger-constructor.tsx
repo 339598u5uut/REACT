@@ -1,45 +1,50 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-useless-concat */
+import React, { useState, useRef, useCallback, FC } from 'react';
 import mainstyles from './burger-constructor-style.module.css';
-import { ConstructorElement, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../Button';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import PropTypes from "prop-types";
-import { useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrder } from '../../services/actions/order';
 import { addIngredient, addIngredientBun, deleteIngredient } from '../../services/actions/ingredient';
-import { useDrop, useDrag } from "react-dnd";
+import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from "react-dnd";
 import { getUser } from '../../services/actions/user';
 import { createSelector } from "reselect";
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
 import { ARRAY_DRAG_MOVE } from '../../services/actions';
 import { useHistory } from 'react-router-dom';
+import { RootState } from '../../services/reducers/root-reducer';
+import { TLayerProps, TIngredient, TUserIngredientsId } from '../../utils/types';
 
-let totalPrice = [];
+let totalPrice: any = [];
 
 export const userIngredientsSelector = createSelector(
-	ingredientsSelector, state => state.ingredient.ingredientItems,
-	(ingredients, ingredientItems) => ingredientItems.map((el) => {
-		const ingredientObject = ingredients.find((ingredient) => el._id === ingredient._id);
+	ingredientsSelector, (state: any) => state.ingredient.ingredientItems,
+	(ingredients: TIngredient[], ingredientItems) => ingredientItems.map((el: TIngredient) => {
+		const ingredientObject = ingredients.find((ingredient: TIngredient) => el._id === ingredient._id);
 		const object = { ...ingredientObject, constructorId: el.constructorId }
 		return object;
 	})
 )
 
-function Layer({ index, moveIngredient, item }) {
+const Layer: FC<TLayerProps> = ({ index, moveIngredient, item }) => {
+
 	const dispatch = useDispatch();
-	const ref = useRef(null);
+	const ref = useRef<HTMLLIElement>(null);
+
 	const [, dragRef] = useDrag({
 		type: 'ingredient2',
 		item: ({ _id: item._id, index }),
-		collect: (monitor) => ({
+		collect: (monitor: DragSourceMonitor) => ({
 			isDragging: monitor.isDragging(),
 		}),
 	});
 
 	const [, dropRef] = useDrop({
 		accept: "ingredient2",
-		hover: (item, monitor) => {
+		hover: (item: TIngredient, monitor: DropTargetMonitor) => {
 			if (!ref.current) {
 				return;
 			}
@@ -51,19 +56,20 @@ function Layer({ index, moveIngredient, item }) {
 			}
 			const hoverBoundingRect = ref.current?.getBoundingClientRect();
 			const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-			const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+			const hoverActualY = monitor.getClientOffset()!.y - hoverBoundingRect.top;
 
-			if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
-			if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
+			if (dragIndex! < hoverIndex && hoverActualY < hoverMiddleY) return;
+			if (dragIndex! > hoverIndex && hoverActualY > hoverMiddleY) return;
 
 			moveIngredient(dragIndex, hoverIndex);
 			item.index = hoverIndex;
+
 		},
 	});
+	dragRef(dropRef(ref));
 
-	const dragDropRef = dragRef(dropRef(ref));
 	return (
-		<li className={mainstyles.block} ref={dragDropRef} key={item.key}>
+		<li className={mainstyles.block} ref={ref} key={item.key} >
 			<DragIcon type='primary' />
 			<ConstructorElement
 				text={item.name}
@@ -76,32 +82,31 @@ function Layer({ index, moveIngredient, item }) {
 	)
 }
 
-const BurgerConstructor = () => {
+const BurgerConstructor: FC = () => {
 
 	const [open, setOpen] = useState(false);
 	const dispatch = useDispatch();
-	const userIngredients = useSelector(userIngredientsSelector);
-	const order = useSelector(state => state.order.order);
+	const userIngredients: TIngredient[] = useSelector(userIngredientsSelector);
+	const order: number = useSelector((state: RootState) => state.order.order);
 	const history = useHistory();
 
-	let userIngredientsId = {
+	let userIngredientsId: TUserIngredientsId = {
 		"ingredients": []
 	};
 
 	for (let i = 0; i < userIngredients.length; i++) {
 		userIngredientsId.ingredients.push(userIngredients[i]._id)
-
 	};
 
-	function getCheckout(event) {
-		dispatch(getUser());
+	function getCheckout(event: React.SyntheticEvent) {
+		dispatch<any>(getUser());
 		event.preventDefault();
 		if (!localStorage.getItem('refreshToken')) {
 			history.replace({
 				pathname: '/login',
 			})
 		} else {
-			dispatch(getOrder(userIngredientsId));
+			dispatch<any>(getOrder(userIngredientsId));
 		}
 	};
 
@@ -110,10 +115,9 @@ const BurgerConstructor = () => {
 	//элемент form
 	const [, dropTarget] = useDrop({
 		accept: "ingredient",
-		drop(item) {
+		drop(item: TIngredient) {
 			if (item._id === '60d3b41abdacab0026a733c6'
 				|| item._id === '60d3b41abdacab0026a733c7') {
-
 				dispatch(addIngredientBun(item))
 			} else {
 				dispatch(addIngredient(item))
@@ -122,9 +126,9 @@ const BurgerConstructor = () => {
 	});
 
 	const moveIngredient = useCallback(
-		(dragIndex, hoverIndex) => {
-
+		(dragIndex: any, hoverIndex: number) => {
 			const dragIngredient = userIngredients[dragIndex];
+
 			if (dragIngredient) {
 				const newIngredients = [...userIngredients];
 				newIngredients.splice(dragIndex, 1);
@@ -133,10 +137,10 @@ const BurgerConstructor = () => {
 			}
 		}, [userIngredients])
 
-	const bunId = useSelector(state => state.ingredient.ingredientBun);
-	const arrayAllIngredientsfromApi = useSelector(state => state.ingredients.ingredients);
-	const bun = arrayAllIngredientsfromApi.find(el => el._id === bunId._id);
 
+	const bunId = useSelector((state: any) => state.ingredient.ingredientBun);
+	const arrayAllIngredientsfromApi = useSelector((state: any) => state.ingredients.ingredients);
+	const bun = arrayAllIngredientsfromApi.find((el: TIngredient) => el._id === bunId._id);
 	userIngredientsId.ingredients.push(bun, bun);
 
 	return (
@@ -185,6 +189,7 @@ const BurgerConstructor = () => {
 				<p className={`${mainstyles.icon} ${"text text_type_digits-medium mr-10 pr-10"}`}>
 					{bun ?
 						totalPrice = totalPrice + bun.price * 2 : totalPrice}</p>
+
 				<Button onClick={
 					() => setOpen(true)}
 					type='primary'
@@ -197,7 +202,7 @@ const BurgerConstructor = () => {
 			</div>
 
 			{order && open &&
-				<Modal onClose={() => setOpen(false)}>
+				<Modal onClose={() => setOpen(false)} name={''}>
 					<OrderDetails
 						number={`${order}`}
 						id='идентификатор заказа'
@@ -208,8 +213,4 @@ const BurgerConstructor = () => {
 	)
 }
 
-BurgerConstructor.propTypes = {
-	moveIngredient: PropTypes.func,
-	index: PropTypes.number,
-}
 export default BurgerConstructor;

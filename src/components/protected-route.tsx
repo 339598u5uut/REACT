@@ -1,25 +1,26 @@
-import { Redirect, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { useEffect, FC } from 'react';
 import { getUser } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../services/reducers/root-reducer';
 
-export function ProtectedRoute({ children, ...rest }) {
-    const userIsAuthenticated = useSelector(state => state.user.isAuthenticated);
-    const userLoading = useSelector(state => state.user.getUserRequest);
+export const ProtectedRoute: FC<RouteProps> = ({ children, ...rest }) => {
+
+    const userIsAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+    const userLoading = useSelector((state: any) => state.user.getUserRequest);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getUser())
+        dispatch<any>(getUser())
     }, []);
 
     if (userLoading || userIsAuthenticated === null) {
-        return null
+        return null;
     }
-
     return (
         <Route
             {...rest}
-            render={({ location }) =>
+            render={({ location }): any =>
                 userIsAuthenticated ? (
                     children
                 ) : (

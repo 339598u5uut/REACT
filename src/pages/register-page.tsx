@@ -1,34 +1,34 @@
 import React from 'react';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Link, Redirect } from 'react-router-dom';
-import { Logo, Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../components/Button';
 import { createUser } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 
 function RegisterPage() {
 	const dispatch = useDispatch()
-	const inputRef = React.useRef(null)
-	const createUserSuccess = useSelector(state => state.user.createUserSuccess);
-	
+	const inputRef = React.useRef<HTMLInputElement>(null)
+	const createUserSuccess = useSelector((state: any) => state.user.createUserSuccess);
+
 	const [form, setValue] = useState({ "email": '', "password": '', 'name': '' });
 
 	const onIconClick = () => {
-		setTimeout(() => inputRef.current.focus(), 0);
+		setTimeout(() => inputRef.current!.focus(), 0);
 	}
 
-	const onChange = e => {
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue({ ...form, [e.target.name]: e.target.value });
 	};
 
-	function registerUser(event) {
-		event.preventDefault();
-		dispatch(createUser(form));
-		setValue('');
+	function registerUser(e: React.SyntheticEvent) {
+		e.preventDefault();
+		dispatch<any>(createUser(form));
+		setValue({ "email": '', "password": '', 'name': '' });
 	};
 
-	const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-	
+	const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
 	if (isAuthenticated === true || createUserSuccess === true) {
 		return (
 			<Redirect
