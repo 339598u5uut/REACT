@@ -1,23 +1,13 @@
-import React, { SyntheticEvent, useEffect, useState, FC } from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
-import { EmailInput, PasswordInput, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
+import { EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../components/Button';
 import { login } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../services/actions/user';
 import { RootState } from '../services/reducers/root-reducer';
 import { TForm, TLocationState } from '../utils/types';
-
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
 
 const LoginPage: FC = () => {
 

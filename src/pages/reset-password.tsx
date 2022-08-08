@@ -1,21 +1,10 @@
-import React, { SyntheticEvent, FC } from 'react';
+import React, { FC } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
-import { Input, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../components/Button';
 import { recoveryPassword } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
-
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
-
 
 const ResetPassword: FC = () => {
 

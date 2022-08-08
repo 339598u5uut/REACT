@@ -1,21 +1,11 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Link, Redirect } from 'react-router-dom';
-import { Input, EmailInput, PasswordInput, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../components/Button';
 import { createUser } from '../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
 
 function RegisterPage() {
 	const dispatch = useDispatch()

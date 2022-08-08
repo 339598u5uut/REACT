@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-useless-concat */
-import React, { useState, useRef, useCallback, FC, SyntheticEvent } from 'react';
+import React, { useState, useRef, useCallback, FC } from 'react';
 import mainstyles from './burger-constructor-style.module.css';
-import { ConstructorElement, Button as ButtonUI, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../Button';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,17 +19,6 @@ import { RootState } from '../../services/reducers/root-reducer';
 import { TLayerProps, TIngredient, TUserIngredientsId } from '../../utils/types';
 
 let totalPrice: any = [];
-
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
 
 export const userIngredientsSelector = createSelector(
 	ingredientsSelector, (state: any) => state.ingredient.ingredientItems,

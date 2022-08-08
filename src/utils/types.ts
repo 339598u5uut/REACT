@@ -80,3 +80,14 @@ export type TForm = {
   email: string;
   password: string;
 }
+
+export type TResponse = {
+  readonly headers: Headers;
+  readonly ok: boolean;
+  readonly redirected: boolean;
+  readonly status: number;
+  readonly statusText: string;
+  readonly url:string;
+  readonly res: any;  
+  json(): Promise<TResponse>;
+}

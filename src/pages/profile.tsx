@@ -1,21 +1,11 @@
 import profileStyle from './profile-style.module.css';
-import { Input, EmailInput, PasswordInput, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useEffect, useState, useRef, useMemo, SyntheticEvent, FC } from 'react';
+import { useEffect, useState, useRef, useMemo, FC } from 'react';
+import { Button } from '../components/Button';
 import { editUser, deleteUser, logout } from '../services/actions/user';
 import { RootState } from '../services/reducers/root-reducer';
-
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
 
 const ProfilePage: FC = () => {
 

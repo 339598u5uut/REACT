@@ -1,23 +1,13 @@
-import React, { SyntheticEvent, useState,FC } from 'react';
+import React, { useState, FC } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
-import { Input, Button as ButtonUI } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button } from '../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/actions/user';
 import { RootState } from '../services/reducers/root-reducer';
 
-const Button: React.FC<{
-	type?: 'secondary' | 'primary';
-	size?: 'small' | 'medium' | 'large';
-	onClick?: (() => void) | ((e: SyntheticEvent) => void);
-	disabled?: boolean;
-	name?: string;
-	htmlType?: 'button' | 'submit' | 'reset';
-	className: string;
-	children: React.ReactNode;
-}> = ButtonUI;
-
-const ForgotPassword:FC=()=> {
+const ForgotPassword: FC = () => {
 
 	const [value, setValue] = useState('');
 	const inputRef = React.useRef<HTMLInputElement>(null)
