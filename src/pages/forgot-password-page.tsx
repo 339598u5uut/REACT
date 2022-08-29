@@ -3,25 +3,24 @@ import { Link, Redirect } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '../components/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../services/reducers/root-reducer';
 import { forgotPassword } from '../services/actions/user';
-import { RootState } from '../services/reducers/root-reducer';
 
 const ForgotPassword: FC = () => {
 
 	const [value, setValue] = useState('');
-	const inputRef = React.useRef<HTMLInputElement>(null)
+	const inputRef = React.useRef<HTMLInputElement>(null);
 	const dispatch = useDispatch();
-	const request = useSelector((state: any) => state.user.forgotPasswordSuccess);
-	const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+	const request = useSelector((state) => state.user.forgotPasswordSuccess);
+	const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
 	function sendEmail(event: { preventDefault: () => void; }) {
 		event.preventDefault();
 		let email = {
-			"email": inputRef!.current!.value
+			"email": inputRef.current?.value
 		};
 
-		dispatch<any>(forgotPassword(email));
+		dispatch(forgotPassword(email));
 		setValue('');
 	};
 

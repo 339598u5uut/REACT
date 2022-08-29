@@ -16,7 +16,7 @@ export type TLayerProps = {
 export type TIngredient = {
   calories: number,
   carbohydrates: number,
-  constructorId: string,
+  constructorId?: string,
   fat: number,
   image: string,
   image_large: string,
@@ -32,7 +32,7 @@ export type TIngredient = {
 }
 
 export type TUserIngredientsId = {
-  ingredients: any[];
+  ingredients: string[];
 }
 
 export type TReduceAcc = {
@@ -45,7 +45,7 @@ export type TReduceCur = {
 
 export type TProduct = {
   count: number;
-  image: any;
+  image: string;
   _id: string;
   name: string;
   price: number;
@@ -70,7 +70,7 @@ export type TModalOverlay = {
 }
 
 export type TOrderDetails = {
-  number: string;
+  number: number;
   id: string;
   message: string;
   recommendation: string;
@@ -80,3 +80,97 @@ export type TForm = {
   email: string;
   password: string;
 }
+
+export type TFeedItem = {
+  number: number;
+  data: string;
+  name: string;
+  key:number;
+  _id:string;
+  list:React.ReactNode;
+  totalPrice:number;
+  price?:number;
+  status?:string;
+}
+
+export type TUser = {
+  email: string;
+  name: string;
+  password?:string;
+}
+
+export type TString ={
+  [key: string]: string; 
+}
+
+export type TIngredientUser = {
+  ingredient: string
+  constructorId?: string;
+  _id?:string;
+
+}
+
+export type TIngredientInState = {
+  _id: string,
+  constructorId?: string; 
+}
+
+export type TMessage = {
+  id: number;
+  name: string;
+  message: string;
+}; 
+
+export type TOrderPage= {
+  number: number;
+  data: number;
+  name: string;
+  price: number;
+}
+
+export type TOrder = {
+  price: number;
+  _id: string;
+  ingredients: string[];
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+};
+
+export type TGetOrdersResponse = {
+  success: boolean;
+  orders: Array<TOrder>;
+  total: number;
+  totalToday: number;
+}
+
+export type TFeedDetales = {
+	number: number;
+	name: string;
+	status: string;
+	price: number;
+	createdAt: string;
+	totalPrice: number;
+	children: React.ReactNode;
+}
+
+export type TFeedStatistics = {
+	total: number;
+	totalToday: number;
+	ready: React.ReactNode;
+	inwork: React.ReactNode;
+	children?: React.ReactNode;
+}
+
+export type TOrderProfileDetails = {
+	number: number;
+	name: string;
+	status: string;
+	price: number;
+	createdAt: string;
+	totalPrice: number;
+	children: React.ReactNode;
+}
+

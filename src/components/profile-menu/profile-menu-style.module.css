@@ -1,16 +1,8 @@
-.container {
-    display: flex;
-    margin: 0 auto;
-    padding-top: 120px;
-    max-width: 1240px;
-    column-gap: 60px;
-}
-
 .menu {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     min-width: 320px;
+    column-gap: 60px;
 }
 
 .wrapper_nav {
@@ -18,12 +10,6 @@
     margin-bottom: 80px;
     flex-direction: column;
     row-gap: 43px;
-}
-
-.wrapper_inputs {
-    display: flex;
-    flex-direction: column;
-    row-gap: 24px;
 }
 
 :global .input.input_size_default {
@@ -39,16 +25,14 @@ button {
     cursor: pointer;
 }
 
-.buttonBlock {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
 .description {
     color: #4C4CFF;
 }
 
 .active {
     color: var(--text-primary-color);
+}
+
+.description {
+    color: #4C4CFF;
 }

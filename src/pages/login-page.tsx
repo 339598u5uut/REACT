@@ -3,10 +3,8 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '../components/Button';
-import { login } from '../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../services/actions/user';
-import { RootState } from '../services/reducers/root-reducer';
+import { login, getUser } from '../services/actions/user';
+import { useDispatch, useSelector } from '../services/reducers/root-reducer';
 import { TForm, TLocationState } from '../utils/types';
 
 const LoginPage: FC = () => {
@@ -16,8 +14,8 @@ const LoginPage: FC = () => {
 	const [form, setValue] = useState<TForm>({ "email": '', "password": '' });
 
 	useEffect(() => {
-		dispatch<any>(getUser())
-	}, [dispatch]);
+		dispatch(getUser())
+	}, []);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setValue({ ...form, [e.target.name]: e.target.value });
@@ -25,11 +23,11 @@ const LoginPage: FC = () => {
 
 	const userLogin = (e: React.SyntheticEvent) => {
 		e.preventDefault();
-		dispatch<any>(login(form));
+		dispatch(login(form));
 	}
 
-	const isAuthenticated = useSelector((state:any) => state.user.isAuthenticated);
-	const loginSuccess = useSelector((state: any) => state.user.loginSuccess);
+	const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+	const loginSuccess = useSelector((state) => state.user.loginSuccess);
 
 	if (isAuthenticated === true || loginSuccess === true) {
 		return (

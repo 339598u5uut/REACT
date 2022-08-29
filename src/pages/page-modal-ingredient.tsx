@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../services/reducers/root-reducer";
 import { useEffect } from "react";
 import IngredientDetails from "../components/ingredient-details/ingredient-details";
 import stylePageModal from "./page-modal-ingredient-style.module.css";
@@ -9,7 +9,7 @@ const IngredientModalPage = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch<any>(ingredients());
+        dispatch(ingredients());
     }, [dispatch]);
 
     return (

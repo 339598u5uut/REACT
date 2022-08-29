@@ -1,14 +1,13 @@
 import styledetails from './ingredient-details-style.module.css';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/reducers/root-reducer';
 import { useEffect, useState, FC } from 'react';
 import { TIngredient, TParamTypes } from '../../utils/types';
-import { RootState } from '../../services/reducers/root-reducer';
 
 export const IngredientDetails: FC = () => {
 
 	const [ingredient, setIngredient] = useState<TIngredient>();
-	const allIngredients: TIngredient[] = useSelector((state: any) => state.ingredients.ingredients);
+	const allIngredients = useSelector((state) => state.ingredients.ingredients);
 	const { id } = useParams<TParamTypes>();
 
 	useEffect(() => {

@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
 import { CurrencyIcon, Tab as TabUI, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/reducers/root-reducer';
+import { TIngredientState } from '../../services/reducers/ingredient-reduser';
 import { useDrag } from "react-dnd";
-import { getIngredient } from '../../services/actions/ingredient-detales';
+import { getIngredient, openIngredientModal } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
 import { useLocation, Link } from 'react-router-dom';
-import { RootState } from '../../services/reducers/root-reducer';
 import { TIngredient, TReduceAcc, TReduceCur, TProduct } from '../../utils/types';
 
 export const Tab: FC<{
@@ -20,6 +20,7 @@ export const Tab: FC<{
 export const ingredientsSelector = (state: any = {}) => state.ingredients.ingredients;
 
 const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal }) => {
+	
 	const location = useLocation();
 	let ingredientId = _id;
 
@@ -51,7 +52,7 @@ const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal
 	)
 }
 
-const allIngredientsSelector = createSelector((state: any) => state.ingredient,
+const allIngredientsSelector = createSelector((state: { ingredient: TIngredientState }) => state.ingredient,
 	({ ingredientItems, ingredientBun }) => {
 		if (ingredientBun && ingredientBun._id) {
 			return [...ingredientItems, ingredientBun]
@@ -148,10 +149,10 @@ function BurgerIngredients() {
 								main.map((main, _id) => <Product src={''} key={main._id} {...main} count={counter[main._id] || 0} handleOpenModal={handleOpenModal} />)}
 						</ul>
 
-					</div >
+					</div>
 				</div>
-			</div >
-		</div >
+			</div>
+		</div>
 	)
 }
 

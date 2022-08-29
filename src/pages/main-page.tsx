@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../services/reducers/root-reducer';
 import { useEffect, FC } from 'react';
 import { ingredients } from '../services/actions/ingredients';
 import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
@@ -10,7 +10,7 @@ import style from './main-style.module.css';
 const Main: FC = () => {
 	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch<any>(ingredients());
+		dispatch(ingredients());
 	}, []);
 
 	return (

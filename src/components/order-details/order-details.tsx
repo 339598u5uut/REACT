@@ -3,7 +3,7 @@ import done from '../../images/done.png';
 import { FC } from 'react';
 import { TOrderDetails } from '../../utils/types';
 
-const OrderDetails: FC<TOrderDetails> = ({ number, id, message, recommendation, }) => {
+export const OrderDetails: FC<TOrderDetails> = ({ number, id, message, recommendation }) => {
 
 	return (
 		<div className={styledetails.container}>
@@ -17,4 +17,3 @@ const OrderDetails: FC<TOrderDetails> = ({ number, id, message, recommendation, 
 }
 
 export default OrderDetails;
-

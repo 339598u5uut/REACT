@@ -1,17 +1,25 @@
 import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN, ARRAY_DRAG_MOVE, CLEAR_CONSTRUCTOR } from "../actions";
+import { TIngredientInState } from "../../utils/types";
+import { TIngredientActions } from "../actions/ingredient";
 
-const initialState = {
-    ingredientBun: {},
+
+export type TIngredientState = {
+    ingredientBun: { _id: string };
+    ingredientItems: TIngredientInState[];
+}
+
+const initialState: TIngredientState = {
+    ingredientBun: { _id: '' },
     ingredientItems: [],
 };
 
-export const ingredientReducer = (state = initialState, action) => {
+export const ingredientReducer = (state = initialState, action: TIngredientActions): TIngredientState => {
     switch (action.type) {
         case ADD_BUN:
             {
                 return {
                     ...state,
-                    ingredientBun: {...state.ingredientBun, ...action.array }
+                    ingredientBun: { ...state.ingredientBun, ...action.array }
                 }
             }
         case ADD_INGREDIENT:
@@ -24,7 +32,7 @@ export const ingredientReducer = (state = initialState, action) => {
             }
         case DELETE_INGREDIENT:
             {
-                const newState = {...state };
+                const newState = { ...state };
                 const itemIndex = newState.ingredientItems.findIndex(
                     (item) => item._id === action.id
                 )

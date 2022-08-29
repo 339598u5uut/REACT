@@ -31,7 +31,7 @@ const AppHeader: FC = () => {
                 <li className={'text text_type_main-default'}>
                   <NavLink
                     activeClassName={headerstyles.active}
-                    to={{ pathname: '/not-found' }}
+                    to={{ pathname: '/feed' }}
                     exact={true}
                     className={'pl-2'}
                   >Лента заказов

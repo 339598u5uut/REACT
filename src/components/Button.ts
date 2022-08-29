@@ -1,7 +1,7 @@
 import { Button as ButtonUI } from "@ya.praktikum/react-developer-burger-ui-components";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, FC } from "react";
 
-export const Button: React.FC<{
+export const Button: FC<{
 	type?: 'secondary' | 'primary';
 	size?: 'small' | 'medium' | 'large';
 	onClick?: (() => void) | ((e: SyntheticEvent) => void);

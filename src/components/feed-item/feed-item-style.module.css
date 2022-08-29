@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+    width: 584px;
+    height: auto;
+    background-color: #1C1C21;
+    border-radius: 40px;
+}
+
+.paragraph {
+    display: flex;
+    justify-content: space-between;
+}
+
+.price {
+    display: flex;
+    padding-right: 40px;
+    height: 64px;
+    align-items: center;
+}
+
+.order {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* .list {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 304px;
+} */

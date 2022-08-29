@@ -1,0 +1,39 @@
+.readyItem {
+    color: #00CCCC;
+}
+
+.item {
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    border: 2px solid rgba(128, 26, 178, 1);
+    background-color: #131316;
+    margin-right: -12px;
+}
+
+.image {
+    width: 60px;
+    height: 60px;
+    object-position: 50% 50%;
+    object-fit: cover;
+}
+
+.list_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ingredient {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.price {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 200px;
+}

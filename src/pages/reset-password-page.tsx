@@ -4,15 +4,15 @@ import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '../components/Button';
 import { recoveryPassword } from '../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../services/reducers/root-reducer';
 
 const ResetPassword: FC = () => {
 
 	const history = useHistory();
 	const dispatch = useDispatch();
-	const forgotPassword = useSelector((state: any) => state.user.forgotPasswordSuccess);
-	const request = useSelector((state: any) => state.user.resetPasswordSuccess);
-	const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+	const forgotPassword = useSelector((state) => state.user.forgotPasswordSuccess);
+	const request = useSelector((state) => state.user.resetPasswordSuccess);
+	const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
 	const [valueInput1, setValueInput1] = React.useState('');
 	const inputRef1 = React.useRef<HTMLInputElement>(null);
@@ -21,20 +21,20 @@ const ResetPassword: FC = () => {
 	const inputRef2 = React.useRef<HTMLInputElement>(null);
 
 	const onIconClick1 = () => {
-		setTimeout(() => inputRef1.current!.focus(), 0);
+		setTimeout(() => inputRef1.current?.focus(), 0);
 	}
 
 	const onIconClick2 = () => {
-		setTimeout(() => inputRef2.current!.focus(), 0);
+		setTimeout(() => inputRef2.current?.focus(), 0);
 	}
 
 	function resetPass(e: React.SyntheticEvent) {
 		e.preventDefault();
 		const data = {
-			"password": inputRef1.current!.value,
-			"token": inputRef2.current!.value,
+			"password": inputRef1.current?.value,
+			"token": inputRef2.current?.value,
 		}
-		dispatch<any>(recoveryPassword(data));
+		dispatch(recoveryPassword(data));
 		setValueInput1('');
 		setValueInput2('');
 	};
