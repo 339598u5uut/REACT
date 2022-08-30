@@ -6,7 +6,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import { Button } from '../Button';
 import Modal from '../modal/modal';
 import { useDispatch, useSelector } from '../../services/reducers/root-reducer';
-import { getOrder, openOrderModal } from '../../services/actions/order';
+import { getOrder } from '../../services/actions/order';
 import { addIngredient, addIngredientBun, deleteIngredient } from '../../services/actions/ingredient';
 import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from "react-dnd";
 import { getUser } from '../../services/actions/user';

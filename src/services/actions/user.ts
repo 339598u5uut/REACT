@@ -81,7 +81,7 @@ export function getCreateUserRequest(form: TUser) {
         })
 };
 
-// middleware
+// thunk
 export const createUser: AppThunk = (form: TUser) => (dispatch: AppDispatch) => {
     dispatch(getCreateUserReq());
     getCreateUserRequest(form)
@@ -256,7 +256,7 @@ export function tokenRefreshError(): TtokenRefreshError {
     }
 }
 
-//middleware 
+//thunk 
 export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
     dispatch(getUserReq());
     getUserRequest()
@@ -424,7 +424,7 @@ export function getForgotPasswordRequest(email: Pick<TUser, 'email'>) {
         })
 };
 
-// middleware
+// thunk
 export const forgotPassword: AppThunk = (email: Pick<TUser, 'email'>) => (dispatch: AppDispatch) => {
     dispatch(getForgotPasswordReq());
     getForgotPasswordRequest(email)
@@ -488,7 +488,7 @@ export function getRecoveryPasswordRequest(email: Pick<TUser, 'email'>) {
         })
 };
 
-// middleware
+// thunk
 export const recoveryPassword: AppThunk = (email: Pick<TUser, 'email'>) => (dispatch: AppDispatch) => {
     dispatch(getRecoveryPasswordReq());
     getRecoveryPasswordRequest(email)
@@ -557,7 +557,7 @@ export const getLogoutRequest = () => {
         })
 };
 
-//middleware
+//thunk
 export const logout: AppThunk = () => (dispatch: AppDispatch) => {
     dispatch(getLogoutReq());
     getLogoutRequest()

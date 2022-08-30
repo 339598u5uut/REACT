@@ -1,19 +1,7 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC } from 'react';
 import style from './feed-list-style.module.css';
-
-export type TFeedList = {
-	number?: number;
-	name?: string;
-	price?: number;
-}
-
-export type TFeedListIngredients = {
-	name: string;
-	price: number;
-	image: string;
-	counter: number;
-}
+import { TFeedList, TFeedListIngredients } from '../../utils/types';
 
 export const FeedListDone: FC<TFeedList> = ({ number }) => {
 	return (

@@ -39,7 +39,7 @@ export const Feed: FC = () => {
 			return allingredientsApi.find(ingredient => id === ingredient._id)
 		});
 
-	let totalPrice = (el: TOrder) => ingredientsList(el).reduce((a: number, b) => a + (b as TIngredient)?.price, 0);
+	let totalPrice = (el: TOrder) => ingredientsList(el).reduce((a, b) => a + (b as TIngredient)?.price, 0);
 
 	return (
 		<div className={styleFeed.container}>
@@ -56,7 +56,7 @@ export const Feed: FC = () => {
 									_id={order._id}
 									number={order.number}
 									name={order.name}
-									data={order.createdAt}
+									data={order.createdAt.slice(0, 10) + ', ' + order.createdAt.slice(11, 19)}
 									list={
 										<ul className={styleFeed.list}>
 											{

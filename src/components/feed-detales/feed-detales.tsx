@@ -1,7 +1,7 @@
 import { FC } from "react";
 import feedIdStyle from './feed-detales-style.module.css';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { TOrder, TParamTypes, TFeedDetales, TIngredient } from "../../utils/types";
+import { TParamTypes, TFeedDetales, TIngredient } from "../../utils/types";
 import { useSelector } from "../../services/reducers/root-reducer";
 import { useParams } from "react-router-dom";
 import { FeedListIngredients } from "../feed-list/feed-list";
@@ -22,15 +22,15 @@ export const FeedDetales: FC<TFeedDetales> = ({ number, name, status, price, cre
 
 	function unique(arr: (TIngredient | undefined)[]) {
 		let result: TIngredient[] = [];
-		for (let str of arr) {
-			if (!result.includes(str as TIngredient)) {
-				result.push(str as TIngredient);
+		for (let ingr of arr) {
+			if (!result.includes(ingr as TIngredient)) {
+				result.push(ingr as TIngredient);
 			}
 		}
 		return result;
 	}
 
-	totalPrice = ingredientsList(findIngredientsId as string[]).reduce((a: number, b) => a + (b as TIngredient).price, 0);
+	totalPrice = ingredientsList(findIngredientsId as string[])?.reduce((a, b) => a + (b as TIngredient).price, 0);
 
 	let counter = (order: TIngredient) => ingredientsList(findIngredientsId as string[]).filter(value =>
 		(value as TIngredient)._id === order?._id).length || 1;
@@ -49,12 +49,11 @@ export const FeedDetales: FC<TFeedDetales> = ({ number, name, status, price, cre
 
 						return (
 							<FeedListIngredients
-								name={(order as TIngredient)?.name}
-								price={(order as TIngredient)?.price}
+								name={order.name}
+								price={order.price}
 								key={index}
-								image={(order as TIngredient)?.image_mobile}
-
-								counter={counter(order as TIngredient)}
+								image={order.image_mobile}
+								counter={counter(order)}
 
 							/>
 						)
@@ -62,7 +61,7 @@ export const FeedDetales: FC<TFeedDetales> = ({ number, name, status, price, cre
 
 				</ul>
 				<div className={`${feedIdStyle.info} ${'pt-5'}`}>
-					<div className='text text_type_main-default text_color_inactive'>{findIngredient.createdAt}</div>
+					<div className='text text_type_main-default text_color_inactive'>{findIngredient.createdAt.slice(0, 10) + ', ' + findIngredient.createdAt.slice(11, 19)}</div>
 					<div className={feedIdStyle.totalPrice}>
 						<span className='text text_type_digits-default'>{totalPrice}</span>
 						<CurrencyIcon type={"primary"} />

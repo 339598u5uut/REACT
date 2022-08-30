@@ -27,7 +27,7 @@ export const ProfileOrdersPage: FC = () => {
 			return allingredientsApi.find(ingredient => id === ingredient._id)
 		});
 
-	let totalPrice = (el: TOrder) => ingredientsList(el).reduce((a: number, b) => a + (b as TIngredient)?.price, 0);
+	let totalPrice = (el: TOrder) => ingredientsList(el).reduce((a, b) => a + (b as TIngredient)?.price, 0);
 
 	return (
 		<main className={profileOrdersStyle.wrapper}>
@@ -39,7 +39,7 @@ export const ProfileOrdersPage: FC = () => {
 					return (
 						<ProfileOrdersItem
 							number={order.number}
-							data={order.createdAt}
+							data={order.createdAt.slice(0, 10) + ', ' + order.createdAt.slice(11, 19)}
 							name={order.name}
 							status={order.status}
 							price={order.price}
@@ -55,8 +55,8 @@ export const ProfileOrdersPage: FC = () => {
 													style={{ zIndex: ingredientsList(order).length - index }}
 													key={index} >
 
-													<img src={(ingredient as TIngredient)?.image_mobile}
-														alt={(ingredient as TIngredient)?.name}
+													<img src={ingredient?.image_mobile}
+														alt={ingredient?.name}
 														className={profileOrdersStyle.image}
 													/>
 

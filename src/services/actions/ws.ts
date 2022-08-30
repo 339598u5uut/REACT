@@ -6,10 +6,7 @@ import {
 	WS_GET_ORDERS,
 	WS_SEND_ORDERS,
 } from ".";
-import type { Middleware, MiddlewareAPI } from 'redux';
 import { TGetOrdersResponse } from "../../utils/types";
-import { RootState, AppDispatch } from "../reducers/root-reducer";
-
 
 export type TWSConnectionStart = {
 	readonly type: typeof WS_CONNECTION_START,
@@ -50,8 +47,8 @@ export type TWSOrderActions = {
 	onOpen: typeof WS_CONNECTION_SUCCESS,
 	onClose: typeof WS_CONNECTION_CLOSED,
 	onError: typeof WS_CONNECTION_ERROR,
-	onOrders: typeof WS_GET_ORDERS,
-	onSendOrders: typeof WS_SEND_ORDERS,
+	onMessage: typeof WS_GET_ORDERS,
+	onSendMessage: typeof WS_SEND_ORDERS,
 }
 
 export const wsConnectionStart = (wsUrl: string): TWSConnectionStart => {
@@ -95,45 +92,5 @@ export const wsSendOrders = (orders: []): TWSSendOrders => {
 	};
 };
 
-export const socketMiddleware = (wsActions: TWSOrderActions): Middleware => {
-	return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
-		let socket: WebSocket | null = null;
-
-		return next => (action) => {
-			const { dispatch, getState } = store;
-			const { type, payload, wsUrl } = action;
-			const { wsInit, onOpen, onClose, onError, onOrders, onSendOrders } = wsActions;
-
-			if (type === 'WS_CONNECTION_START') {
-				socket = new WebSocket(wsUrl);
-			}
-
-			if (socket) {
-				socket.onopen = event => {
-					dispatch({ type: 'WS_CONNECTION_SUCCESS', payload: event });
-				};
-
-				socket.onerror = event => {
-					dispatch({ type: 'WS_CONNECTION_ERROR', payload: event });
-				};
-
-				socket.onmessage = event => {
-					const data = JSON.parse(event.data);
-					dispatch({ type: 'WS_GET_ORDERS', payload: data });
-				};
-
-				socket.onclose = event => {
-					dispatch({ type: 'WS_CONNECTION_CLOSED', payload: event });
-				};
-
-				if (type === 'WS_SEND_ORDERS') {
-					const message = payload;
-					socket.send(JSON.stringify(message));
-				}
-			}
-			next(action);
-		};
-	}) as Middleware;
-};
 
 

@@ -1,26 +1,27 @@
 import React, { FC, useState } from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
-import { CurrencyIcon, Tab as TabUI, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/reducers/root-reducer';
 import { TIngredientState } from '../../services/reducers/ingredient-reduser';
 import { useDrag } from "react-dnd";
-import { getIngredient, openIngredientModal } from '../../services/actions/ingredient-detales';
+import { getIngredient } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
 import { useLocation, Link } from 'react-router-dom';
-import { TIngredient, TReduceAcc, TReduceCur, TProduct } from '../../utils/types';
+import { TIngredient, TReduceAcc, TReduceCur, TProduct, TIngredientInState, TString, TSelector } from '../../utils/types';
+import { Tab } from '../tab';
 
-export const Tab: FC<{
-	active: boolean;
-	value: string;
-	onClick: (value: string) => void;
-	children?: React.ReactNode;
-}> = TabUI;
+export const ingredientsSelector = (state: { ingredients: { ingredients: any; }; }) => state.ingredients.ingredients;
 
-
-export const ingredientsSelector = (state: any = {}) => state.ingredients.ingredients;
+const allIngredientsSelector = createSelector((state: { ingredient: TIngredientState }) => state.ingredient,
+	({ ingredientItems, ingredientBun }) => {
+		if (ingredientBun && ingredientBun._id) {
+			return [...ingredientItems, ingredientBun]
+		}
+		return ingredientItems;
+	})
 
 const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal }) => {
-	
+
 	const location = useLocation();
 	let ingredientId = _id;
 
@@ -52,21 +53,11 @@ const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal
 	)
 }
 
-const allIngredientsSelector = createSelector((state: { ingredient: TIngredientState }) => state.ingredient,
-	({ ingredientItems, ingredientBun }) => {
-		if (ingredientBun && ingredientBun._id) {
-			return [...ingredientItems, ingredientBun]
-		}
-		return ingredientItems;
-	})
-
-
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
 	const dispatch = useDispatch();
 	const ingredients = useSelector(ingredientsSelector);
 	const userIngredients = useSelector(allIngredientsSelector);
-
 	const handleOpenModal = (props: TIngredient): void => {
 		dispatch(getIngredient(props));
 	};

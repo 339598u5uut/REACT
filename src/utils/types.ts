@@ -1,4 +1,5 @@
 import { Location } from "history";
+import { TIngredientState } from "../services/reducers/ingredient-reduser";
 
 export type TLocationState = {
   background?: Location;
@@ -100,14 +101,13 @@ export type TUser = {
 }
 
 export type TString ={
-  [key: string]: string; 
+  [_id: string]: string;  
 }
 
 export type TIngredientUser = {
   ingredient: string
   constructorId?: string;
   _id?:string;
-
 }
 
 export type TIngredientInState = {
@@ -174,3 +174,33 @@ export type TOrderProfileDetails = {
 	children: React.ReactNode;
 }
 
+export type TSelector= {
+  calories: number,
+  carbohydrates: number,
+  constructorId?: string,
+  fat: number,
+  image: string,
+  image_large: string,
+  image_mobile: string,
+  name: string,
+  price: number,
+  proteins: number,
+  type: string,
+  __v?: number,
+  _id: string,
+  key?: number,
+  index?: number;
+}
+
+export type TFeedList = {
+	number?: number;
+	name?: string;
+	price?: number;
+}
+
+export type TFeedListIngredients = {
+	name: string;
+	price: number;
+	image: string;
+	counter: number;
+}

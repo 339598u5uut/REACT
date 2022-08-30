@@ -14,7 +14,7 @@ import { deleteIngredient, closeIngredientModal } from '../../services/actions/i
 import { useDispatch } from '../../services/reducers/root-reducer';
 import IngredientModalPage from '../../pages/page-modal-ingredient';
 import NotFoundPage from '../../pages/not-found-page';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { TLocationState } from '../../utils/types';
 import { Feed } from '../../pages/feed-page';
 import { FeedDetales } from '../feed-detales/feed-detales';
@@ -22,6 +22,7 @@ import { ProfileOrdersPage } from '../../pages/profile-orders-page';
 import { OrderModalPage } from '../../pages/order-modal-page';
 import FeedModalPage from '../../pages/feed-modal-page';
 import OrderProfileDetails from '../order-profile-details/order-profile-details';
+import { ingredients } from '../../services/actions/ingredients';
 
 const App: FC = () => {
 
@@ -29,6 +30,10 @@ const App: FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const background = location.state && location.state.background;
+
+  useEffect(() => {
+		dispatch(ingredients());
+	}, []);
 
   const handleCloseModal = () => {
     dispatch(deleteIngredient());

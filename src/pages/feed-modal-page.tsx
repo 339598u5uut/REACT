@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { FC } from 'react';
 import stylePageModal from "./page-modal-ingredient-style.module.css";
 import { FeedDetales } from "../components/feed-detales/feed-detales";
-import { ingredients } from "../services/actions/ingredients";
 import { wsConnectionClosed, wsConnectionStart } from "../services/actions/ws";
 import { useParams } from "react-router-dom";
 import { FeedListIngredients } from "../components/feed-list/feed-list";
@@ -15,7 +14,6 @@ const FeedModalPage: FC = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(ingredients());
         dispatch(wsConnectionStart(WS_URL));
         return () => {
             dispatch(wsConnectionClosed());
@@ -29,7 +27,7 @@ const FeedModalPage: FC = () => {
 
     const ingredientsList = (findIngredient: TOrder | undefined) => allIngredients?.filter(item =>
         findIngredient?.ingredients.includes(item._id));
-    let totalPrice = ingredientsList(findIngredient).reduce((a: number, b: { price: number; }) => a + b.price, 0);
+    let totalPrice = ingredientsList(findIngredient).reduce((a, b) => a + b.price, 0);
 
     return (
         findIngredient ? (

@@ -29,7 +29,7 @@ const OrderProfileDetails: FC<TOrderProfileDetails> = ({ number, name, status, p
 		return result;
 	}
 
-	totalPrice = ingredientsList(findIngredientsId as string[]).reduce((a: number, b) => a + (b as TIngredient).price, 0);
+	totalPrice = ingredientsList(findIngredientsId as string[])?.reduce((a, b) => a + (b as TIngredient).price, 0);
 
 	let counter = (order: TIngredient) => ingredientsList(findIngredientsId as string[]).filter(value =>
 		(value as TIngredient)._id === order?._id).length || 1;
@@ -46,17 +46,17 @@ const OrderProfileDetails: FC<TOrderProfileDetails> = ({ number, name, status, p
 					{unique(ingredientsList(findIngredientsId as string[])).map((order, index) => {
 						return (
 							<FeedListIngredients
-								name={(order as TIngredient).name}
-								price={(order as TIngredient).price}
+								name={order.name}
+								price={order.price}
 								key={index}
-								image={(order as TIngredient).image_mobile}
-								counter={counter(order as TIngredient)} />
+								image={order.image_mobile}
+								counter={counter(order)} />
 						)
 					})}
 
 				</ul>
 				<div className={`${styleDetails.info} ${'pt-5'}`}>
-					<div className='text text_type_main-default text_color_inactive'>{findIngredient.createdAt}</div>
+					<div className='text text_type_main-default text_color_inactive'>{findIngredient.createdAt.slice(0,10)+', '+ findIngredient.createdAt.slice(11,19)}</div>
 					<div className={styleDetails.totalPrice}>
 						<span className='text text_type_digits-default'>{totalPrice}</span>
 						<CurrencyIcon type={"primary"} />

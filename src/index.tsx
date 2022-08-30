@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { rootReducer } from './services/reducers/root-reducer';
 import thunk from 'redux-thunk';
-import { socketMiddleware } from './services/actions/ws';
+import { socketMiddleware } from './services/middleware/socket-middleware';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START, WS_CONNECTION_SUCCESS, WS_GET_ORDERS, WS_SEND_ORDERS } from './services/actions';
 
 const wsActions = {
@@ -16,8 +16,8 @@ const wsActions = {
   onOpen: WS_CONNECTION_SUCCESS,
   onClose: WS_CONNECTION_CLOSED,
   onError: WS_CONNECTION_ERROR,
-  onOrders: WS_GET_ORDERS,
-  onSendOrders: WS_SEND_ORDERS,
+  onMessage: WS_GET_ORDERS,
+  onSendMessage: WS_SEND_ORDERS,
 };
 
 export const composeEnhancers =

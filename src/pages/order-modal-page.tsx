@@ -1,7 +1,6 @@
 import { FC, useEffect } from "react";
 import orderModalStyle from './order-modal-page-style.module.css';
 import { useDispatch, useSelector } from "../services/reducers/root-reducer";
-import { ingredients } from "../services/actions/ingredients";
 import { wsConnectionStart } from "../services/actions/ws";
 import { getCookie, WS_ORDERS_URL } from "../utils/app-api";
 import { TOrder, TParamTypes } from "../utils/types";
@@ -15,7 +14,6 @@ export const OrderModalPage: FC = () => {
     const accessToken = getCookie('accessToken')?.replace('Bearer', '').trim();
 
     useEffect(() => {
-        dispatch(ingredients());
         dispatch(wsConnectionStart(`${WS_ORDERS_URL}?token=${accessToken}`));
     }, [accessToken]);
 
@@ -26,7 +24,7 @@ export const OrderModalPage: FC = () => {
 
     const ingredientsList = (findIngredient: TOrder | undefined) => allIngredients?.filter(item =>
         findIngredient?.ingredients.includes(item._id));
-    let totalPrice = ingredientsList(findIngredient).reduce((a: number, b: { price: number; }) => a + b.price, 0);
+    let totalPrice = ingredientsList(findIngredient).reduce((a, b) => a + b.price, 0);
 
     return (
 
