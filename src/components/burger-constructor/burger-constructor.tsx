@@ -11,17 +11,19 @@ import { addIngredient, addIngredientBun, deleteIngredient } from '../../service
 import { useDrop, useDrag, DropTargetMonitor, DragSourceMonitor } from "react-dnd";
 import { getUser } from '../../services/actions/user';
 import { createSelector } from "reselect";
-import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
+// import { ingredientsSelector } from '../burger-ingredients/burger-ingredients';
 import { useHistory } from 'react-router-dom';
 import { arrayDragMove, clearConstructor } from '../../services/actions/ingredient';
 import { OrderDetails } from '../order-details/order-details';
-import { TLayerProps, TIngredient, TUserIngredientsId, TIngredientInState } from '../../utils/types';
+import { TLayerProps, TIngredient, TUserIngredientsId, TIngredientInState, TSelector } from '../../utils/types';
 import { getCookie } from '../../utils/app-api';
 
 export const userIngredientsSelector = createSelector(
-	ingredientsSelector, (state: { ingredient: { ingredientItems: TIngredientInState[] } }) => state.ingredient.ingredientItems,
-	(ingredients: TIngredient[], ingredientItems) => ingredientItems.map((el: TIngredientInState) => {
+	((state: { ingredients: { ingredients: TSelector[] | any } }) => state.ingredients.ingredients), (state: { ingredient: { ingredientItems: TIngredientInState[] } }) =>
+	state.ingredient.ingredientItems, (ingredients: TIngredient[], ingredientItems) => ingredientItems.map((el: TIngredientInState) => {
+
 		const ingredientObject = ingredients.find((ingredient: TIngredient) => el._id === ingredient._id);
+
 		const object = { ...ingredientObject, constructorId: el.constructorId }
 		return object;
 	})

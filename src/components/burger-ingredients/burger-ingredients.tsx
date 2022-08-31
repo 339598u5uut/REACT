@@ -7,10 +7,8 @@ import { useDrag } from "react-dnd";
 import { getIngredient } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
 import { useLocation, Link } from 'react-router-dom';
-import { TIngredient, TReduceAcc, TReduceCur, TProduct, TIngredientInState, TString, TSelector } from '../../utils/types';
+import { TIngredient, TReduceAcc, TReduceCur, TProduct } from '../../utils/types';
 import { Tab } from '../tab';
-
-export const ingredientsSelector = (state: { ingredients: { ingredients: any; }; }) => state.ingredients.ingredients;
 
 const allIngredientsSelector = createSelector((state: { ingredient: TIngredientState }) => state.ingredient,
 	({ ingredientItems, ingredientBun }) => {
@@ -56,7 +54,7 @@ const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
 	const dispatch = useDispatch();
-	const ingredients = useSelector(ingredientsSelector);
+	const ingredients = useSelector(state => state.ingredients.ingredients);
 	const userIngredients = useSelector(allIngredientsSelector);
 	const handleOpenModal = (props: TIngredient): void => {
 		dispatch(getIngredient(props));
@@ -90,9 +88,9 @@ function BurgerIngredients() {
 		}
 	}, {});
 
-	const bun: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "bun");
-	const sauce: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "sauce");
-	const main: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "main");
+	const bun = ingredients.filter((element) => element.type === "bun");
+	const sauce = ingredients.filter((element) => element.type === "sauce");
+	const main = ingredients.filter((element) => element.type === "main");
 
 	return (
 		<div className={mainstyles.menu}>
