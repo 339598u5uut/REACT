@@ -4,19 +4,26 @@ import {
     OPEN_INGREDIENT_MODAL,
     CLOSE_INGREDIENT_MODAL,
 } from "../actions";
+import { TIngredientDetalesActions } from "../actions/ingredient-detales";
+import { TIngredient } from "../../utils/types";
 
-const initialState = {
+export type TIngredientDetalesState = {
+    ingredient: object;
+    modalOpen: boolean;
+}
+
+const initialState: TIngredientDetalesState = {
     ingredient: {},
     modalOpen: false,
 };
 
-export const currentIngredientReducer = (state = initialState, action) => {
+export const currentIngredientReducer = (state = initialState, action: TIngredientDetalesActions): TIngredientDetalesState => {
     switch (action.type) {
         case GET_INGREDIENT:
             {
                 return {
                     ...state,
-                    ingredient: {...state.ingredient, ...action.array },
+                    ingredient: { ...state.ingredient, ...action.array },
                 };
             }
         case DEL_INGREDIENT:

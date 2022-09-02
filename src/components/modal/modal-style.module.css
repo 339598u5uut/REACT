@@ -25,3 +25,9 @@
     background-color: transparent;
     cursor: pointer;
 }
+
+.header_load {
+    padding-top: 100px;
+    text-align: center;
+    font-size: 70px;
+}

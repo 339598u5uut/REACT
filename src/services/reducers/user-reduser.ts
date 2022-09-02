@@ -32,8 +32,45 @@ import {
     GET_CREATE_USER_SUCCESS,
     GET_CREATE_USER_ERROR,
 } from "../actions";
+import { TUserActions } from "../actions/user";
 
-const initialState = {
+export type TUserState = {
+    user: {
+        email: string,
+        name: string,
+        password: string| undefined,
+    },
+    isAuthenticated: null|boolean;
+    getUserMessage: string;
+    getUserSuccess: boolean;
+    getUserRequest: boolean;
+    getUserError: boolean;
+    createUserSuccess: boolean;
+    createUserMessage: string;
+    createUserRequest: boolean;
+    createUserError: boolean;
+    loginSuccess: boolean;
+    loginRequest: boolean;
+    loginError: boolean;
+    logoutSuccess: null|boolean;
+    logoutRequest: boolean;
+    logoutError: boolean;
+    editUserSuccess: boolean;
+    editUserRequest: boolean;
+    editUserError: boolean;
+    refreshTokenRequest: boolean;
+    refreshTokenError: boolean;
+    forgotPasswordSuccess: boolean;
+    forgotPasswordMessage: string;
+    forgotPasswordRequest: boolean;
+    forgotPasswordError: boolean;
+    resetPasswordSuccess: boolean;
+    resetPasswordMessage: string;
+    resetPasswordRequest: boolean;
+    resetPasswordError: boolean;
+}
+
+const initialState:TUserState = {
     user: {
         email: '',
         name: '',
@@ -78,7 +115,7 @@ const initialState = {
     resetPasswordError: false,
 };
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action:TUserActions):TUserState => {
     switch (action.type) {
         case GET_USER_REQUEST:
             {
@@ -118,8 +155,6 @@ export const userReducer = (state = initialState, action) => {
             {
                 return {
                     ...initialState,
-
-
                 };
             }
         case EDIT_USER_REQUEST:
@@ -134,7 +169,7 @@ export const userReducer = (state = initialState, action) => {
             {
                 return {
                     ...state,
-                    editUsersuccess: true,
+                    editUserSuccess: true,
                     editUserRequest: false,
                     editUserError: false,
                     user: {
@@ -279,8 +314,6 @@ export const userReducer = (state = initialState, action) => {
                     isAuthenticated: true,
                     createUserRequest: false,
                     createUserSuccess: true,
-                    createUsermessage: action.message,
-
                 };
             }
         case GET_CREATE_USER_ERROR:
@@ -289,6 +322,7 @@ export const userReducer = (state = initialState, action) => {
                     ...state,
                     createUserRequest: false,
                     createUserError: true,
+                    createUserMessage: action.message,
                 };
             }
         case GET_LOGOUT_REQUEST:

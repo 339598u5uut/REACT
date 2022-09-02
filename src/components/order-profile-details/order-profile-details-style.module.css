@@ -1,0 +1,55 @@
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 20px;
+    width: 640px;
+    height: 640px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    padding-right: 24px;
+    gap: 16px;
+    height: 270px;
+    overflow: auto;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.totalPrice {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.textColor {
+    color: #00CCCC;
+}
+
+.textAlign {
+    text-align: center;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8585AD;
+}

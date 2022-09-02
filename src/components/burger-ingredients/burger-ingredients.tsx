@@ -1,25 +1,25 @@
 import React, { FC, useState } from 'react';
 import mainstyles from './burger-ingredients-style.module.css';
-import { CurrencyIcon, Tab as TabUI, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch, useSelector } from '../../services/reducers/root-reducer';
+import { TIngredientState } from '../../services/reducers/ingredient-reduser';
 import { useDrag } from "react-dnd";
 import { getIngredient } from '../../services/actions/ingredient-detales';
 import { createSelector } from 'reselect';
 import { useLocation, Link } from 'react-router-dom';
-import { RootState } from '../../services/reducers/root-reducer';
 import { TIngredient, TReduceAcc, TReduceCur, TProduct } from '../../utils/types';
+import { Tab } from '../tab';
 
-export const Tab: FC<{
-	active: boolean;
-	value: string;
-	onClick: (value: string) => void;
-	children?: React.ReactNode;
-}> = TabUI;
-
-
-export const ingredientsSelector = (state: any = {}) => state.ingredients.ingredients;
+const allIngredientsSelector = createSelector((state: { ingredient: TIngredientState }) => state.ingredient,
+	({ ingredientItems, ingredientBun }) => {
+		if (ingredientBun && ingredientBun._id) {
+			return [...ingredientItems, ingredientBun]
+		}
+		return ingredientItems;
+	})
 
 const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal }) => {
+
 	const location = useLocation();
 	let ingredientId = _id;
 
@@ -51,21 +51,11 @@ const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal
 	)
 }
 
-const allIngredientsSelector = createSelector((state: any) => state.ingredient,
-	({ ingredientItems, ingredientBun }) => {
-		if (ingredientBun && ingredientBun._id) {
-			return [...ingredientItems, ingredientBun]
-		}
-		return ingredientItems;
-	})
-
-
 function BurgerIngredients() {
 	const [current, setCurrent] = useState('one')
 	const dispatch = useDispatch();
-	const ingredients = useSelector(ingredientsSelector);
+	const ingredients = useSelector(state => state.ingredients.ingredients);
 	const userIngredients = useSelector(allIngredientsSelector);
-
 	const handleOpenModal = (props: TIngredient): void => {
 		dispatch(getIngredient(props));
 	};
@@ -98,9 +88,9 @@ function BurgerIngredients() {
 		}
 	}, {});
 
-	const bun: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "bun");
-	const sauce: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "sauce");
-	const main: TIngredient[] = ingredients.filter((element: TIngredient) => element.type === "main");
+	const bun = ingredients.filter((element) => element.type === "bun");
+	const sauce = ingredients.filter((element) => element.type === "sauce");
+	const main = ingredients.filter((element) => element.type === "main");
 
 	return (
 		<div className={mainstyles.menu}>
@@ -148,10 +138,10 @@ function BurgerIngredients() {
 								main.map((main, _id) => <Product src={''} key={main._id} {...main} count={counter[main._id] || 0} handleOpenModal={handleOpenModal} />)}
 						</ul>
 
-					</div >
+					</div>
 				</div>
-			</div >
-		</div >
+			</div>
+		</div>
 	)
 }
 

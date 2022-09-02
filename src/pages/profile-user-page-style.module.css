@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    margin: 0 auto;
+    padding-top: 120px;
+    max-width: 1240px;
+    column-gap: 60px;
+}
+
+.wrapper_inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+}
+
+.buttonBlock {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

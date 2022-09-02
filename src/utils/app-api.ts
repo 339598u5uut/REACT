@@ -1,4 +1,6 @@
 export const URL = 'https://norma.nomoreparties.space/api';
+export const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
+export const WS_ORDERS_URL = 'wss://norma.nomoreparties.space/orders';
 
 export function getCookie(name: string) {
     const matches = document.cookie.match(
@@ -8,7 +10,7 @@ export function getCookie(name: string) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-export function setCookie(name: string, value: any, props: { [x: string]: any; expires?: any; } | undefined) {
+export function setCookie(name: string, value: any, props?: { [x: string]: any; expires?: any; } | undefined) {
     props = props || {};
     let exp = props.expires;
     if (typeof exp == 'number' && exp) {

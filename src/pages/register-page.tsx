@@ -1,21 +1,20 @@
-import React from 'react';
+import React,{ useState }  from 'react';
 import loginStyle from './login-forgot-register-reset-style.module.css';
 import { Link, Redirect } from 'react-router-dom';
 import { Input, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '../components/Button';
 import { createUser } from '../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useDispatch, useSelector } from '../services/reducers/root-reducer';
 
 function RegisterPage() {
 	const dispatch = useDispatch()
 	const inputRef = React.useRef<HTMLInputElement>(null)
-	const createUserSuccess = useSelector((state: any) => state.user.createUserSuccess);
+	const createUserSuccess = useSelector((state) => state.user.createUserSuccess);
 
 	const [form, setValue] = useState({ "email": '', "password": '', 'name': '' });
 
 	const onIconClick = () => {
-		setTimeout(() => inputRef.current!.focus(), 0);
+		setTimeout(() => inputRef.current?.focus(), 0);
 	}
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,11 +23,11 @@ function RegisterPage() {
 
 	function registerUser(e: React.SyntheticEvent) {
 		e.preventDefault();
-		dispatch<any>(createUser(form));
+		dispatch(createUser(form));
 		setValue({ "email": '', "password": '', 'name': '' });
 	};
 
-	const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+	const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 	if (isAuthenticated === true || createUserSuccess === true) {
 		return (
 			<Redirect

@@ -1,6 +1,4 @@
-import { useDispatch } from 'react-redux';
-import { useEffect, FC } from 'react';
-import { ingredients } from '../services/actions/ingredients';
+import { FC } from 'react';
 import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../components/burger-constructor/burger-constructor';
 import { DndProvider } from "react-dnd";
@@ -8,10 +6,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import style from './main-style.module.css';
 
 const Main: FC = () => {
-	const dispatch = useDispatch();
-	useEffect(() => {
-		dispatch<any>(ingredients());
-	}, []);
 
 	return (
 		<div className="App">

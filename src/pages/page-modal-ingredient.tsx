@@ -1,17 +1,7 @@
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 import IngredientDetails from "../components/ingredient-details/ingredient-details";
 import stylePageModal from "./page-modal-ingredient-style.module.css";
-import { ingredients } from "../services/actions/ingredients";
 
 const IngredientModalPage = () => {
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch<any>(ingredients());
-    }, [dispatch]);
-
     return (
         <main className={stylePageModal.main}>
             <div className={stylePageModal.container}>
