@@ -149,7 +149,7 @@ const BurgerConstructor: FC = () => {
 
 
 	return (
-		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout} ref={dropTarget} >
+		<form className={`${mainstyles.order} ${'pl-10'}`} onSubmit={getCheckout} ref={dropTarget}>
 
 			{bun && userIngredientsId.ingredients.push(bun._id, bun._id) &&
 

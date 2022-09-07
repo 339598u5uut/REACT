@@ -31,7 +31,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/REACT">
     <React.StrictMode>
       <Provider store={store}>
         <App />
