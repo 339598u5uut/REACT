@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/REACT/static/css/main.89ee9a46.css",
-    "main.js": "/REACT/static/js/main.28a432f2.js",
+    "main.js": "/REACT/static/js/main.b146e356.js",
     "static/js/787.2b4cbca8.chunk.js": "/REACT/static/js/787.2b4cbca8.chunk.js",
     "static/media/JetBrainsMono-Bold.woff": "/REACT/static/media/JetBrainsMono-Bold.3914674f1cb2335acf26.woff",
     "static/media/JetBrainsMono-Regular.woff": "/REACT/static/media/JetBrainsMono-Regular.f52bee61d00ce995b89f.woff",
@@ -12,11 +12,11 @@
     "static/media/done.png": "/REACT/static/media/done.a1cd4e2dc7075413b337.png",
     "index.html": "/REACT/index.html",
     "main.89ee9a46.css.map": "/REACT/static/css/main.89ee9a46.css.map",
-    "main.28a432f2.js.map": "/REACT/static/js/main.28a432f2.js.map",
+    "main.b146e356.js.map": "/REACT/static/js/main.b146e356.js.map",
     "787.2b4cbca8.chunk.js.map": "/REACT/static/js/787.2b4cbca8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.89ee9a46.css",
-    "static/js/main.28a432f2.js"
+    "static/js/main.b146e356.js"
   ]
 }
