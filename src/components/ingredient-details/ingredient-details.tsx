@@ -18,7 +18,7 @@ export const IngredientDetails: FC = () => {
 
 	return (
 		ingredient ? (
-			<div className={styledetails.container}>
+			<div className={styledetails.container} data-cy="ingredient-details-modal">
 				<p className={`${'text text_type_main-large mb-10'} ${'header_align'}`}>Детали ингредиента</p>
 				<img src={ingredient.image} alt={ingredient.name}></img>
 				<p className={'text text_type_main-medium mb-5'}>{ingredient.name}</p>

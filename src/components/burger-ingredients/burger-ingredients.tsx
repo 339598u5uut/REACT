@@ -36,7 +36,7 @@ const Product: FC<TProduct> = ({ count, image, _id, name, price, handleOpenModal
 					state: { background: location },
 				}}
 			>
-				<li className={`${mainstyles.item} ${'p-1'}`} ref={dragRef} {...handleOpenModal}>
+				<li className={`${mainstyles.item} ${'p-1'}`} ref={dragRef} {...handleOpenModal} data-cy="item-ingredient">
 					{count !== 0 ?
 						<div className={mainstyles.counter}><Counter count={count} size="default" /></div> : <></>}
 					<img src={image} alt={name} />
