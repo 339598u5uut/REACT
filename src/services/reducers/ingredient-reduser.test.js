@@ -3,10 +3,7 @@ import { ADD_INGREDIENT, DELETE_INGREDIENT, ADD_BUN, ARRAY_DRAG_MOVE, CLEAR_CONS
 
 describe('currentIngredientReducer', () => {
     it('should return the initial state', () => {
-        expect(ingredientReducer(undefined, {})).toEqual({
-            ingredientBun: { _id: '' },
-            ingredientItems: [],
-        })
+        expect(ingredientReducer(undefined, {})).toEqual(initialState)
     })
 
     it('should handle GET_INGREDIENT', () => {
@@ -14,10 +11,8 @@ describe('currentIngredientReducer', () => {
             type: ADD_INGREDIENT,
             array: [1, 2, 2]
         }
-
         expect(ingredientReducer(initialState, action)).toEqual({
             ...initialState,
-            ingredientBun: { _id: '' },
             ingredientItems: [action.array],
         })
     })
@@ -27,10 +22,8 @@ describe('currentIngredientReducer', () => {
             type: DELETE_INGREDIENT,
             ingredientItems: [1]
         }
-
         expect(ingredientReducer(initialState, action)).toEqual({
             ...initialState,
-            ingredientBun: { _id: '' },
             ingredientItems: [],
         })
     })
@@ -40,11 +33,9 @@ describe('currentIngredientReducer', () => {
             type: ADD_BUN,
             array: { _id: '123' }
         }
-
         expect(ingredientReducer(initialState, action)).toEqual({
             ...initialState,
             ingredientBun: { _id: '123' },
-            ingredientItems: [],
         })
     })
 
@@ -53,10 +44,8 @@ describe('currentIngredientReducer', () => {
             type: ARRAY_DRAG_MOVE,
             array: [23456]
         }
-
         expect(ingredientReducer(initialState, action)).toEqual({
             ...initialState,
-            ingredientBun: { _id: '' },
             ingredientItems: [23456],
         })
     })
@@ -65,11 +54,6 @@ describe('currentIngredientReducer', () => {
         const action = {
             type: CLEAR_CONSTRUCTOR,
         }
-
-        expect(ingredientReducer(initialState, action)).toEqual({
-            ...initialState,
-            ingredientBun: { _id: '' },
-            ingredientItems: [],
-        })
+        expect(ingredientReducer(initialState, action)).toEqual({...initialState })
     })
 })

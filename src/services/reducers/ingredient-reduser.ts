@@ -8,7 +8,7 @@ export type TIngredientState = {
     ingredientItems: TIngredientInState[];
 }
 
-const initialState: TIngredientState = {
+export const initialState: TIngredientState = {
     ingredientBun: { _id: '' },
     ingredientItems: [],
 };

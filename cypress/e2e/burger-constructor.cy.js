@@ -32,7 +32,7 @@ describe('service is available', function() {
     });
 
     it('should be get order number,open and close order-modal', function() {
-        cy.get('[data-cy="constructor-form"]').submit();
+        cy.get("button").contains("Оформить заказ").click();
         cy.wait("@postOrder").then(() => { cy.get('[data-cy="order-details"]').contains("123") });
         cy.get('[data-cy="modal-close"]').click();
     });

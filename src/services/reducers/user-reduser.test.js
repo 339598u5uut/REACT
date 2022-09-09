@@ -1,4 +1,4 @@
-import { userReducer } from "./user-reduser";
+import { userReducer, initialState } from "./user-reduser";
 import {
     GET_USER_REQUEST,
     GET_USER_SUCCESS,
@@ -36,206 +36,117 @@ import {
 
 describe('userReducer', () => {
     it('should return the initial state', () => {
-        expect(userReducer(undefined, {})).toEqual({
-            user: {
-                email: '',
-                name: '',
-                password: ''
-            },
-            isAuthenticated: null,
-
-            getUserMessage: '',
-            getUserSuccess: false,
-            getUserRequest: false,
-            getUserError: false,
-
-            createUserSuccess: false,
-            createUserMessage: '',
-            createUserRequest: false,
-            createUserError: false,
-
-            loginSuccess: false,
-            loginRequest: false,
-            loginError: false,
-
-
-            logoutSuccess: null,
-            logoutRequest: false,
-            logoutError: false,
-
-            editUserSuccess: false,
-            editUserRequest: false,
-            editUserError: false,
-
-            refreshTokenRequest: false,
-            refreshTokenError: false,
-
-            forgotPasswordSuccess: false,
-            forgotPasswordMessage: '',
-            forgotPasswordRequest: false,
-            forgotPasswordError: false,
-
-            resetPasswordSuccess: false,
-            resetPasswordMessage: '',
-            resetPasswordRequest: false,
-            resetPasswordError: false,
-        })
+        expect(userReducer(undefined, {})).toEqual(initialState)
     })
 
     it('should handle GET_USER_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_USER_REQUEST
             })
-        ).toEqual({
-            getUserRequest: true,
-        })
+        ).toEqual({...initialState, getUserRequest: true })
     })
 
     it('should handle GET_USER_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_USER_SUCCESS,
-                user: {},
+                user: { "email": 1, "name": 2, "password": '' },
             })
         ).toEqual({
+            ...initialState,
             getUserSuccess: true,
-            getUserRequest: false,
-            getUserError: false,
-            user: {},
+            user: { "email": 1, "name": 2, "password": '' },
             isAuthenticated: true,
         })
     })
 
     it('should handle GET_USER_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_USER_ERROR,
-                getUserMessage: 'Error'
+                getUserMessage: undefined
             })
         ).toEqual({
+            ...initialState,
             getUserError: true,
-            getUserRequest: false,
             isAuthenticated: false,
+            getUserMessage: undefined
         })
     })
 
     it('should handle DELETE_USER', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: DELETE_USER
             })
-        ).toEqual({
-            user: {
-                email: '',
-                name: '',
-                password: ''
-            },
-            isAuthenticated: null,
-
-            getUserMessage: '',
-            getUserSuccess: false,
-            getUserRequest: false,
-            getUserError: false,
-
-            createUserSuccess: false,
-            createUserMessage: '',
-            createUserRequest: false,
-            createUserError: false,
-
-            loginSuccess: false,
-            loginRequest: false,
-            loginError: false,
-
-
-            logoutSuccess: null,
-            logoutRequest: false,
-            logoutError: false,
-
-            editUserSuccess: false,
-            editUserRequest: false,
-            editUserError: false,
-
-            refreshTokenRequest: false,
-            refreshTokenError: false,
-
-            forgotPasswordSuccess: false,
-            forgotPasswordMessage: '',
-            forgotPasswordRequest: false,
-            forgotPasswordError: false,
-
-            resetPasswordSuccess: false,
-            resetPasswordMessage: '',
-            resetPasswordRequest: false,
-            resetPasswordError: false,
-        })
+        ).toEqual({...initialState })
     })
 
     it('should handle EDIT_USER_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: EDIT_USER_REQUEST
             })
         ).toEqual({
+            ...initialState,
             editUserRequest: true,
         })
     })
 
     it('should handle EDIT_USER_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: EDIT_USER_SUCCESS,
-                user: {}
+                user: { "email": 1, "name": 2, "password": '' },
             })
         ).toEqual({
+            ...initialState,
             editUserSuccess: true,
-            editUserRequest: false,
-            editUserError: false,
-            user: {},
+            user: { "email": 1, "name": 2, "password": '' },
         })
     })
 
     it('should handle EDIT_USER_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: EDIT_USER_ERROR,
             })
         ).toEqual({
+            ...initialState,
             editUserError: true,
-            editUserRequest: false,
         })
     })
 
     it('should handle REFRESH_TOKEN_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: REFRESH_TOKEN_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             refreshTokenRequest: true,
-            refreshTokenError: false,
-            getUserError: false,
         })
     })
 
     it('should handle REFRESH_TOKEN_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: REFRESH_TOKEN_SUCCESS,
             })
         ).toEqual({
-            refreshTokenRequest: false,
-            isAuthenticated: true
+            ...initialState,
+            isAuthenticated: true,
         })
     })
 
     it('should handle REFRESH_TOKEN_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: REFRESH_TOKEN_ERROR,
             })
         ).toEqual({
-            refreshTokenRequest: false,
+            ...initialState,
             refreshTokenError: true,
             isAuthenticated: false,
         })
@@ -243,114 +154,118 @@ describe('userReducer', () => {
 
     it('should handle GET_FORGOT_PASSWORD_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_FORGOT_PASSWORD_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             forgotPasswordRequest: true,
         })
     })
 
     it('should handle GET_FORGOT_PASSWORD_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_FORGOT_PASSWORD_SUCCESS,
-                message: 'forgot password'
+                message: undefined,
             })
         ).toEqual({
-            forgotPasswordRequest: false,
+            ...initialState,
             forgotPasswordSuccess: true,
-            forgotPasswordMessage: 'forgot password',
+            forgotPasswordMessage: undefined,
         })
     })
 
     it('should handle GET_FORGOT_PASSWORD_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_FORGOT_PASSWORD_ERROR,
             })
         ).toEqual({
-            forgotPasswordRequest: false,
+            ...initialState,
             forgotPasswordError: true,
         })
     })
 
     it('should handle GET_RESET_PASSWORD_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_RESET_PASSWORD_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             resetPasswordRequest: true,
         })
     })
 
     it('should handle GET_RESET_PASSWORD_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_RESET_PASSWORD_SUCCESS,
-                message: 'reset password',
+                message: undefined,
             })
         ).toEqual({
-            resetPasswordRequest: false,
+            ...initialState,
             resetPasswordSuccess: true,
-            resetPasswordMessage: 'reset password',
+            resetPasswordMessage: undefined,
         })
     })
 
     it('should handle GET_RESET_PASSWORD_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_RESET_PASSWORD_ERROR,
             })
         ).toEqual({
-            resetPasswordRequest: false,
+            ...initialState,
             resetPasswordError: true,
         })
     })
 
     it('should handle GET_AUTHORIZATION_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_AUTHORIZATION_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             loginRequest: true,
         })
     })
 
     it('should handle GET_AUTHORIZATION_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_AUTHORIZATION_SUCCESS,
-                user: {},
+                user: { "email": 1, "name": 2, "password": '' },
             })
         ).toEqual({
-            user: {},
+            ...initialState,
+            user: { "email": 1, "name": 2, "password": '' },
             isAuthenticated: true,
             loginSuccess: true,
-            loginRequest: false,
-            loginError: false,
+
         })
     })
 
     it('should handle GET_AUTHORIZATION_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_AUTHORIZATION_ERROR,
             })
         ).toEqual({
-            loginRequest: false,
+            ...initialState,
             loginError: true,
         })
     })
 
     it('should handle GET_LOGOUT_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_LOGOUT_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             logoutRequest: true,
             isAuthenticated: false,
         })
@@ -358,62 +273,62 @@ describe('userReducer', () => {
 
     it('should handle GET_LOGOUT_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_LOGOUT_SUCCESS,
             })
         ).toEqual({
+            ...initialState,
             logoutSuccess: true,
-            logoutRequest: false,
-            logoutError: false,
             isAuthenticated: false,
         })
     })
 
     it('should handle GET_LOGOUT_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_LOGOUT_ERROR,
             })
         ).toEqual({
-            logoutRequest: false,
+            ...initialState,
             logoutError: true,
         })
     })
 
     it('should handle GET_CREATE_USER_REQUEST', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_CREATE_USER_REQUEST,
             })
         ).toEqual({
+            ...initialState,
             createUserRequest: true,
         })
     })
 
     it('should handle GET_CREATE_USER_SUCCESS', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_CREATE_USER_SUCCESS,
-                user: {},
+                user: { "email": 1, "name": 2, "password": '' },
             })
         ).toEqual({
-            user: {},
+            ...initialState,
+            user: { "email": 1, "name": 2, "password": '' },
             isAuthenticated: true,
-            createUserRequest: false,
             createUserSuccess: true,
         })
     })
 
     it('should handle GET_CREATE_USER_ERROR', () => {
         expect(
-            userReducer({}, {
+            userReducer((initialState), {
                 type: GET_CREATE_USER_ERROR,
-                message: 'create user error',
+                message: undefined,
             })
         ).toEqual({
-            createUserRequest: false,
+            ...initialState,
             createUserError: true,
-            createUserMessage: 'create user error',
+            createUserMessage: undefined,
         })
     })
 })

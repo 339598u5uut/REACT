@@ -135,7 +135,6 @@ const BurgerConstructor: FC = () => {
 
 			if (dragIngredient) {
 				const newIngredients = [...userIngredients];
-				console.log(newIngredients, 'newIngredients')
 				newIngredients.splice(dragIndex, 1);
 				newIngredients.splice(hoverIndex, 0, dragIngredient);
 				dispatch(arrayDragMove(newIngredients as Array<TIngredient>));
@@ -202,6 +201,7 @@ const BurgerConstructor: FC = () => {
 					size='medium'
 					className={'text text_type_digits-medium'}
 					disabled={userIngredients.length && bun ? false : true}
+					data-cy="button"
 				>
 					Оформить заказ
 				</Button>
