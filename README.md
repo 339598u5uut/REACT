@@ -53,7 +53,7 @@
 npm run cypress
 
 
-[GitHubPages](https://339598u5uut.github.io/REACT/)
+## Перейти в проект: [GitHubPages](https://339598u5uut.github.io/REACT/)
 
 
 ***  
