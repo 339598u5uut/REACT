@@ -6,13 +6,13 @@
 
 ## Технологии
 
-* React
-* TypeScript
-* Redux
-* WebSocket
-* React Router
-* React DnD
-* CSS Modules
+*	React
+* 	TypeScript
+* 	Redux
+* 	WebSocket
+* 	React Router
+* 	React DnD
+* 	CSS Modules
 
 
 ## Функциональность
