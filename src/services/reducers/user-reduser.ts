@@ -70,7 +70,7 @@ export type TUserState = {
     resetPasswordError: boolean;
 }
 
-const initialState:TUserState = {
+export const initialState:TUserState = {
     user: {
         email: '',
         name: '',

@@ -32,7 +32,7 @@ const Modal: FC<TModal> = ({ onClose, name, children }) => {
 				<div className={modalstyles.container}>
 					{isFetching === true ? <h3 className={modalstyles.header_load}>Loading...</h3> : ''}
 					<p className={'text text_type_main-medium'}>{name}</p>
-					<button className={modalstyles.icon} onClick={onClose}>
+					<button className={modalstyles.icon} onClick={onClose}  data-cy="modal-close">
 						<img src={close} alt="Close" className={'icon'} />
 					</button>
 					{children}

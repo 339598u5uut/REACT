@@ -6,7 +6,7 @@ import { TOrderDetails } from '../../utils/types';
 export const OrderDetails: FC<TOrderDetails> = ({ number, id, message, recommendation }) => {
 
 	return (
-		<div className={styledetails.container}>
+		<div className={styledetails.container} data-cy="order-details">
 			<p className={'text text_type_digits-large mb-8'}>{number}</p>
 			<p className={'text text_type_main-default mb-15'}>{id}</p>
 			<img src={done} alt="Done" />

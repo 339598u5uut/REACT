@@ -5,14 +5,13 @@ import {
     CLOSE_INGREDIENT_MODAL,
 } from "../actions";
 import { TIngredientDetalesActions } from "../actions/ingredient-detales";
-import { TIngredient } from "../../utils/types";
 
 export type TIngredientDetalesState = {
     ingredient: object;
     modalOpen: boolean;
 }
 
-const initialState: TIngredientDetalesState = {
+export const initialState: TIngredientDetalesState = {
     ingredient: {},
     modalOpen: false,
 };
